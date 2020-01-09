@@ -27,13 +27,13 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="category">Category*</label>
-			<select th:field="*{category}" required th:errorclass="error">
+			<label for="categoryId">Category*</label>
+			<select th:field="*{categoryId}" required th:errorclass="error">
 				<option value="">-- Choose category --</option>
-				<option th:each="category : ${expenseCategories}" th:value="${category.name}" th:text="${category.name}">Category</option>
+				<option th:each="category : ${expenseCategories}" th:value="${category.id}" th:text="${category.name}">Category</option>
 			</select>
-			<div class="error" th:if="${#fields.hasErrors('category')}">
-				<p th:each="err : ${#fields.errors('category')}" th:text="${err}">Error message</p>
+			<div class="error" th:if="${#fields.hasErrors('categoryId')}">
+				<p th:each="err : ${#fields.errors('categoryId')}" th:text="${err}">Error message</p>
 			</div>
 		</div>
 		<div class="form-group">
@@ -47,5 +47,13 @@
 			<button class="submit-btn" type="submit">Create new expense</button>
 		</div>
 	</form>
+	<div class="expenses-list">
+		<div class="expenses-list-item" th:each="expense : ${expensesList}">
+			<div class="expense-date" th:text="|Date: ${expense.date}|">Date: 18-07-2019</div>
+			<div class="expense-value" th:text="|Value: ${expense.value}|">Value: 345.21$</div>
+			<div class="expense-category" th:text="|Category: ${expense.category.name}|">Category: sport</div>
+			<div class="expense-description" th:text="|Description: ${expense.description}|">Description: Definitely too much money!</div>
+		</div>
+	</div>
 </body>
 </html>
