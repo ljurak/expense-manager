@@ -6,25 +6,25 @@ import javax.validation.constraints.Size;
 
 public class UserRegisterCommand {
 	
-	@NotBlank
-	@Size(min = 5, max = 50)
+	@NotBlank(message = "{validation.required}")
+	@Size(min = 5, max = 50, message = "{validation.size}")
 	private String username;
 	
-	@NotBlank
-	@Size(min = 5, max = 50)
+	@NotBlank(message = "{validation.required}")
+	@Size(min = 5, max = 50, message = "{validation.size}")
 	private String password;
 	
-	@NotBlank
-	@Size(min = 5, max = 50)
+	@NotBlank(message = "{validation.required}")
+	@Size(min = 5, max = 50, message = "{validation.size}")
 	private String firstname;
 	
-	@NotBlank
-	@Size(min = 5, max = 50)
+	@NotBlank(message = "{validation.required}")
+	@Size(min = 5, max = 50, message = "{validation.size}")
 	private String lastname;
 	
-	@NotBlank
-	@Size(min = 5, max = 100)
-	@Email
+	@NotBlank(message = "{validation.required}")
+	@Size(min = 5, max = 100, message = "{validation.size}")
+	@Email(message = "{validation.email}")
 	private String email;
 
 	public String getUsername() {

@@ -4,28 +4,29 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class ExpenseCreateCommand {
 	
-	@NotNull
-	@PastOrPresent
+	@NotNull(message = "{validation.notNull}")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@PastOrPresent(message = "{validation.pastOrPresent}")
 	private LocalDate date;
 	
-	@NotNull
-	@Digits(integer = 6, fraction = 2)
+	@NotNull(message = "{validation.required}")
+	@Digits(integer = 6, fraction = 2, message = "{validation.monetaryValue}")
 	private BigDecimal value;
 	
-	@NotBlank
-	private String category;
+	@NotNull(message = "{validation.required}")
+	private Long categoryId;
 	
-	@NotBlank
-	private String user;
+	private String username;
 	
-	@Size(max = 255)
+	@Size(max = 255, message = "{validation.maxSize}")
 	private String description;
 
 	public LocalDate getDate() {
@@ -44,20 +45,20 @@ public class ExpenseCreateCommand {
 		this.value = value;
 	}
 
-	public String getCategory() {
-		return category;
+	public Long getCategoryId() {
+		return categoryId;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
 	}
 
-	public String getUser() {
-		return user;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getDescription() {
@@ -73,8 +74,8 @@ public class ExpenseCreateCommand {
 		return "ExpenseCreateCommand ["
 				+ "date=" + date 
 				+ ", value=" + value 
-				+ ", category=" + category 
-				+ ", user=" + user
+				+ ", categoryId=" + categoryId 
+				+ ", username=" + username
 				+ ", description=" + description + "]";
 	}
 }
