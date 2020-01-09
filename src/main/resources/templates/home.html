@@ -8,5 +8,44 @@
 </head>
 <body>
 	Logged in
+	<form action="#" th:action="@{/perform-logout}" method="post">
+		<button type="submit">Log out</button>
+	</form>
+	<form class="expence-form" action="#" th:action="@{/expenses}" th:object="${expenseCommand}" method="post">
+		<div class="form-group">
+			<label for="date">Date*</label>
+			<input th:field="*{date}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error">
+			<div class="error" th:if="${#fields.hasErrors('date')}">
+				<p th:each="err : ${#fields.errors('date')}" th:text="${err}">Error message</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="value">Value*</label>
+			<input th:field="*{value}" type="text" required th:errorclass="error">
+			<div class="error" th:if="${#fields.hasErrors('value')}">
+				<p th:each="err : ${#fields.errors('value')}" th:text="${err}">Error message</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="category">Category*</label>
+			<select th:field="*{category}" required th:errorclass="error">
+				<option value="">-- Choose category --</option>
+				<option th:each="category : ${expenseCategories}" th:value="${category.name}" th:text="${category.name}">Category</option>
+			</select>
+			<div class="error" th:if="${#fields.hasErrors('category')}">
+				<p th:each="err : ${#fields.errors('category')}" th:text="${err}">Error message</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="description">Description</label>
+			<textarea th:field="*{description}" th:errorclass="error"></textarea>
+			<div class="error" th:if="${#fields.hasErrors('description')}">
+				<p th:each="err : ${#fields.errors('description')}" th:text="${err}">Error message</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<button class="submit-btn" type="submit">Create new expense</button>
+		</div>
+	</form>
 </body>
 </html>
