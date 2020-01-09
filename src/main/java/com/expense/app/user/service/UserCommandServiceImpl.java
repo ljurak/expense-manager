@@ -1,6 +1,7 @@
 package com.expense.app.user.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.expense.app.user.dto.command.UserRegisterCommand;
 import com.expense.app.user.dto.command.UserUpdateCommand;
@@ -12,6 +13,7 @@ import com.expense.app.user.repo.RoleRepo;
 import com.expense.app.user.repo.UserRepo;
 
 @Service
+@Transactional
 public class UserCommandServiceImpl implements UserCommandService {
 
 	private UserRepo userRepo;
