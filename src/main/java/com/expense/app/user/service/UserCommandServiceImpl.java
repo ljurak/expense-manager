@@ -1,5 +1,6 @@
 package com.expense.app.user.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +21,12 @@ public class UserCommandServiceImpl implements UserCommandService {
 	
 	private RoleRepo roleRepo;
 	
-	public UserCommandServiceImpl(UserRepo userRepo, RoleRepo roleRepo) {
+	private PasswordEncoder passwordEncoder;
+	
+	public UserCommandServiceImpl(UserRepo userRepo, RoleRepo roleRepo, PasswordEncoder passwordEncoder) {
 		this.userRepo = userRepo;
 		this.roleRepo = roleRepo;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	@Override
@@ -36,7 +40,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 		
 		UserEntity user = UserEntity.builder()
 				.username(command.getUsername())
-				.password("{noop}" + command.getPassword())
+				.password("{bcrypt}" + passwordEncoder.encode(command.getPassword()))
 				.firstname(command.getFirstname())
 				.lastname(command.getLastname())
 				.email(command.getEmail())
