@@ -25,7 +25,7 @@ public class ExpenseEntity {
 	@Column(nullable = false)
 	private LocalDate date;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, precision = 8, scale = 2)
 	private BigDecimal value;
 	
 	@ManyToOne
