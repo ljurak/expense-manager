@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<meta charset="UTF-8">
 	<title>Homepage</title>
@@ -8,56 +8,62 @@
 	<link rel="stylesheet" href="../static/css/expenses.css" th:href="@{/css/expenses.css}">
 </head>
 <body>
-	Logged in
-	<form action="#" th:action="@{/perform-logout}" method="post">
-		<button type="submit">Log out</button>
-	</form>
 	<div class="container">
-		<form class="expense-form" action="#" th:action="@{/expenses}" th:object="${expenseCommand}" method="post">
-			<div class="form-group">
-				<label for="date">Date*</label>
-				<input th:field="*{date}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error">
-				<div class="error" th:if="${#fields.hasErrors('date')}">
-					<p th:each="err : ${#fields.errors('date')}" th:text="${err}">Error message</p>
+		<header class="page-header">
+			<div class="user-info" sec:authorize="isAuthenticated()">
+				Logged in as <span sec:authentication="principal.username">User</span>
+			</div>
+			<form class="logout-form" action="#" th:action="@{/perform-logout}" method="post">
+				<button class="submit-btn" type="submit">Log out</button>
+			</form>
+		</header>
+		<main class="main-content">
+			<form class="expense-form" action="#" th:action="@{/expenses}" th:object="${expenseCommand}" method="post">
+				<div class="form-group">
+					<label for="date">Date*</label>
+					<input th:field="*{date}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('date')}">
+						<p th:each="err : ${#fields.errors('date')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="value">Value*</label>
+					<input th:field="*{value}" type="text" required th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('value')}">
+						<p th:each="err : ${#fields.errors('value')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="categoryId">Category*</label>
+					<select th:field="*{categoryId}" required th:errorclass="error">
+						<option value="">-- Choose category --</option>
+						<option th:each="category : ${expenseCategories}" th:value="${category.id}" th:text="${category.name}">Category</option>
+					</select>
+					<div class="error" th:if="${#fields.hasErrors('categoryId')}">
+						<p th:each="err : ${#fields.errors('categoryId')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="description">Description</label>
+					<textarea th:field="*{description}" th:errorclass="error"></textarea>
+					<div class="error" th:if="${#fields.hasErrors('description')}">
+						<p th:each="err : ${#fields.errors('description')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<button class="submit-btn" type="submit">Create new expense</button>
+				</div>
+			</form>
+			<div class="expenses-list">
+				<div class="expenses-list-item" th:each="expense : ${expensesList}">
+					<div class="expense-date" th:text="|Date: ${expense.date}|">Date: 18-07-2019</div>
+					<div class="expense-value" th:text="|Value: ${expense.value}|">Value: 345.21$</div>
+					<div class="expense-category" th:text="|Category: ${expense.category.name}|">Category: sport</div>
+					<div class="expense-description" th:if="${expense.description != null}" th:text="|Description: ${expense.description}|">Description: Definitely too much money!</div>
+					<a class="remove-btn" href="#">Remove</a>
 				</div>
 			</div>
-			<div class="form-group">
-				<label for="value">Value*</label>
-				<input th:field="*{value}" type="text" required th:errorclass="error">
-				<div class="error" th:if="${#fields.hasErrors('value')}">
-					<p th:each="err : ${#fields.errors('value')}" th:text="${err}">Error message</p>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="categoryId">Category*</label>
-				<select th:field="*{categoryId}" required th:errorclass="error">
-					<option value="">-- Choose category --</option>
-					<option th:each="category : ${expenseCategories}" th:value="${category.id}" th:text="${category.name}">Category</option>
-				</select>
-				<div class="error" th:if="${#fields.hasErrors('categoryId')}">
-					<p th:each="err : ${#fields.errors('categoryId')}" th:text="${err}">Error message</p>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="description">Description</label>
-				<textarea th:field="*{description}" th:errorclass="error"></textarea>
-				<div class="error" th:if="${#fields.hasErrors('description')}">
-					<p th:each="err : ${#fields.errors('description')}" th:text="${err}">Error message</p>
-				</div>
-			</div>
-			<div class="form-group">
-				<button class="submit-btn" type="submit">Create new expense</button>
-			</div>
-		</form>
-		<div class="expenses-list">
-			<div class="expenses-list-item" th:each="expense : ${expensesList}">
-				<div class="expense-date" th:text="|Date: ${expense.date}|">Date: 18-07-2019</div>
-				<div class="expense-value" th:text="|Value: ${expense.value}|">Value: 345.21$</div>
-				<div class="expense-category" th:text="|Category: ${expense.category.name}|">Category: sport</div>
-				<div class="expense-description" th:if="${expense.description != null}" th:text="|Description: ${expense.description}|">Description: Definitely too much money!</div>
-				<a class="remove-btn" href="#">Remove</a>
-			</div>
-		</div>
+		</main>
 	</div>
 </body>
 </html>
