@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<meta charset="UTF-8">
-	<title>Homepage</title>
+	<title>Expense Manager</title>
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=latin-ext" rel="stylesheet">
 	<link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
 	<link rel="stylesheet" href="../static/css/expenses.css" th:href="@{/css/expenses.css}">
@@ -55,15 +55,58 @@
 				</div>
 			</form>
 			<div class="expenses-list">
+				<ul class="pagination-control" th:if="${pageCount > 1}">
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses}"> &lt;&lt; First page</a>
+					</li>
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses(page=${currentPage - 1},size=15)}">&lt; Previous page</a>
+					</li>
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses(page=${currentPage + 1},size=15)}">Next page &gt;</a>
+					</li>
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses(page=${pageCount - 1},size=15)}">Last page  &gt;&gt;</a>
+					</li>				
+				</ul>
 				<div class="expenses-list-item" th:each="expense : ${expensesList}">
-					<div class="expense-date" th:text="|Date: ${expense.date}|">Date: 18-07-2019</div>
-					<div class="expense-value" th:text="|Value: ${expense.value}|">Value: 345.21$</div>
-					<div class="expense-category" th:text="|Category: ${expense.category.name}|">Category: sport</div>
-					<div class="expense-description" th:if="${expense.description != null}" th:text="|Description: ${expense.description}|">Description: Definitely too much money!</div>
+					<div class="expense-date">
+						<span class="title">Date:</span>
+						<span class="value" th:text="${expense.date}">18-07-2019</span>
+					</div>
+					<div class="expense-value">
+						<span class="title">Value:</span>
+						<span class="value" th:text="${expense.value}">345.21$</span>
+					</div>
+					<div class="expense-category">
+						<span class="title">Category:</span>
+						<span class="value" th:text="${expense.category.name}">sport</span>
+					</div>
+					<div class="expense-description" th:if="${expense.description != null}">
+						<span class="title">Description:</span>
+						<span class="value" th:text="${expense.description}">Definitely too much money!</span>
+					</div>
 					<a class="remove-btn" href="#">Remove</a>
 				</div>
+				<ul class="pagination-control" th:if="${pageCount > 1}">
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses}"> &lt;&lt; First page</a>
+					</li>
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses(page=${currentPage - 1},size=15)}">&lt; Previous page</a>
+					</li>
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses(page=${currentPage + 1},size=15)}">Next page &gt;</a>
+					</li>
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses(page=${pageCount - 1},size=15)}">Last page  &gt;&gt;</a>
+					</li>				
+				</ul>
 			</div>
 		</main>
+		<footer class="page-footer">
+			<p>Expense Manager 2019</p>
+		</footer>
 	</div>
 </body>
 </html>
