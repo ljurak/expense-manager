@@ -1,3 +1,31 @@
+/* PAGE HEADER */
+
+.page-header {
+	position: absolute;
+	top: 0;
+	width: calc(100% - 30px);
+	height: 50px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.logout-form {
+	margin-left: 20px;
+}
+
+.logout-form .submit-btn {
+	padding: 5px 20px;
+	background-color: transparent;
+	border: 2px solid #000;
+	transition: all 0.3s;
+}
+
+.logout-form .submit-btn:hover {
+	border-color: #f00;
+	color: #f00;
+}
+
 /* EXPENSE CREATE FORM */
 
 .expense-form {
