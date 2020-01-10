@@ -38,6 +38,10 @@ public class ExpenseCommandController {
 			return "home";
 		}
 		
+		if (command.getDescription().length() == 0) {
+			command.setDescription(null);
+		}
+		
 		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
 		command.setUsername(username);
 		
