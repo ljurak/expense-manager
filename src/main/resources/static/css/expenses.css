@@ -26,6 +26,18 @@
 	color: #f00;
 }
 
+/* PAGE FOOTER */
+
+.page-footer {
+	position: absolute;
+	bottom: 0;
+	width: calc(100% - 30px);
+	height: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 /* EXPENSE CREATE FORM */
 
 .expense-form {
@@ -111,8 +123,23 @@
 
 .expenses-list .expense-date,
 .expenses-list .expense-value,
+.expenses-list .expense-category,
+.expenses-list .expense-description {
+	display: flex;
+}
+
+.expenses-list .expense-date,
+.expenses-list .expense-value,
 .expenses-list .expense-category:not(:last-child) {
 	margin-bottom: 5px;
+}
+
+.expenses-list .expenses-list-item .title {
+	width: 100px;
+}
+
+.expenses-list .expenses-list-item .value {
+	width: 450px;
 }
 
 .expenses-list .remove-btn {
@@ -130,4 +157,29 @@
 .expenses-list .remove-btn:hover {
 	color: #f00;
 	border-color: #f00;
+}
+
+/* EXPENSES PAGINATION */
+
+.pagination-control {
+	list-style: none;
+	text-align: center;
+	padding: 0;
+	margin: 10px 0;
+	display: flex;
+	font-size: 14px;
+}
+
+.pagination-control .pagination-control-item {
+	width: 25%;
+}
+
+.pagination-control a {
+	text-decoration: none;
+	font-style: italic;
+	color: #000;
+}
+
+.pagination-control a:hover {
+	color: #140ff0;
 }
