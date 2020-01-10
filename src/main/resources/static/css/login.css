@@ -30,14 +30,20 @@
 	padding: 5px 20px;
 	background-color: transparent;
 	border: 2px solid #000;
+	transition: all 0.3s;
 }
+
+.login-form .submit-btn:hover {
+	border-color: #00d000;
+	color: #00d000;
+} 
 
 .login-form .alert-error {
 	color: #f00;
 }
 
 .login-form .alert-success {
-	color: #0f0;
+	color: #00d000;
 }
 
 .login-form .register-link {

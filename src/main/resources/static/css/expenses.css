@@ -1,0 +1,105 @@
+/* EXPENSE CREATE FORM */
+
+.expense-form {
+	margin: 0 auto;
+	padding: 20px;
+	border: 2px solid #000;
+}
+
+.expense-form .form-group {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.expense-form .form-group:last-of-type {
+	margin-bottom: 0;
+}
+
+.expense-form label {
+	display: block;
+	width: 25%;
+}
+
+.expense-form input,
+.expense-form select,
+.expense-form textarea {
+	display: block;
+	width: 75%;
+	padding: 5px;
+	border: 1px solid rgba(0,0,0,.3);
+}
+
+.expense-form input.error,
+.expense-form select.error,
+.expense-form textarea.error {
+	border-color: rgba(255,0,0,);
+}
+
+.expense-form input:focus,
+.expense-form select:focus,
+.expense-form textarea:focus {
+	box-shadow: inset 0 0 1px rgba(0,0,0,.3);
+}
+
+.expense-form .submit-btn {
+	padding: 5px 20px;
+	background-color: transparent;
+	border: 2px solid #000;
+	margin: 0 auto;
+	transition: all 0.3s;
+}
+
+.expense-form .submit-btn:hover {
+	border-color: #00d000;
+	color: #00d000;
+}
+
+.expense-form div.error {
+	width: 100%;
+	padding-left: 25%;
+}
+
+.expense-form div.error p {
+	margin: 8px 0 -8px;
+	color: #f00;
+	font-style: italic;
+}
+
+/* EXPENSES LIST */
+
+.expenses-list {
+	margin-top: 20px;
+	color: #555;
+}
+
+.expenses-list .expenses-list-item {
+	padding: 10px 20px;
+	margin-bottom: 10px;
+	position: relative;
+	border: 1px solid #555;
+}
+
+.expenses-list .expense-date,
+.expenses-list .expense-value,
+.expenses-list .expense-category:not(:last-child) {
+	margin-bottom: 5px;
+}
+
+.expenses-list .remove-btn {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 14px;
+	color: #000;
+	text-decoration: none;
+	padding: 5px 20px;
+	border: 2px solid #000;
+	transition: all 0.3s;
+}
+
+.expenses-list .remove-btn:hover {
+	color: #f00;
+	border-color: #f00;
+}
