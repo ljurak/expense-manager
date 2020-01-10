@@ -1,5 +1,7 @@
 package com.expense.app.expense.controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +25,12 @@ public class ExpenseQueryController {
 	}
 	
 	@GetMapping
-	public String showExpensesPage(Model model) {
+	public String showExpensesPage(Authentication authentication, Model model) {
+		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+		
 		model.addAttribute("expenseCommand", new ExpenseCreateCommand());
 		model.addAttribute("expenseCategories", categoryRepo.findAll());
-		model.addAttribute("expensesList", expenseRepo.findAll());
+		model.addAttribute("expensesList", expenseRepo.findByUsername(username));
 		return "home";
 	}
 }
