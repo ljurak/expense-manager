@@ -125,4 +125,5 @@ INSERT INTO expenses (date, value, category_id, user_id, description) VALUES
 	('2019-12-23', 8.38, 6, 1, null),
 	('2019-12-25', 7.90, 3, 1, null),
 	('2019-12-27', 228.00, 2, 1, null),
+	('2019-12-29', 56.45, 6, 1, 'Some goods! And something else... But I don''t tell you what. It''s a secret. Maybe in the the future you''ll deserve to know.'),
 	('2019-12-30', 71.29, 3, 1, null);
