@@ -4,55 +4,59 @@
 	<meta charset="UTF-8">
 	<title>Homepage</title>
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=latin-ext" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="../static/css/main.css" th:href="@{/css/main.css}">
+	<link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
+	<link rel="stylesheet" href="../static/css/expenses.css" th:href="@{/css/expenses.css}">
 </head>
 <body>
 	Logged in
 	<form action="#" th:action="@{/perform-logout}" method="post">
 		<button type="submit">Log out</button>
 	</form>
-	<form class="expence-form" action="#" th:action="@{/expenses}" th:object="${expenseCommand}" method="post">
-		<div class="form-group">
-			<label for="date">Date*</label>
-			<input th:field="*{date}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error">
-			<div class="error" th:if="${#fields.hasErrors('date')}">
-				<p th:each="err : ${#fields.errors('date')}" th:text="${err}">Error message</p>
+	<div class="container">
+		<form class="expense-form" action="#" th:action="@{/expenses}" th:object="${expenseCommand}" method="post">
+			<div class="form-group">
+				<label for="date">Date*</label>
+				<input th:field="*{date}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error">
+				<div class="error" th:if="${#fields.hasErrors('date')}">
+					<p th:each="err : ${#fields.errors('date')}" th:text="${err}">Error message</p>
+				</div>
 			</div>
-		</div>
-		<div class="form-group">
-			<label for="value">Value*</label>
-			<input th:field="*{value}" type="text" required th:errorclass="error">
-			<div class="error" th:if="${#fields.hasErrors('value')}">
-				<p th:each="err : ${#fields.errors('value')}" th:text="${err}">Error message</p>
+			<div class="form-group">
+				<label for="value">Value*</label>
+				<input th:field="*{value}" type="text" required th:errorclass="error">
+				<div class="error" th:if="${#fields.hasErrors('value')}">
+					<p th:each="err : ${#fields.errors('value')}" th:text="${err}">Error message</p>
+				</div>
 			</div>
-		</div>
-		<div class="form-group">
-			<label for="categoryId">Category*</label>
-			<select th:field="*{categoryId}" required th:errorclass="error">
-				<option value="">-- Choose category --</option>
-				<option th:each="category : ${expenseCategories}" th:value="${category.id}" th:text="${category.name}">Category</option>
-			</select>
-			<div class="error" th:if="${#fields.hasErrors('categoryId')}">
-				<p th:each="err : ${#fields.errors('categoryId')}" th:text="${err}">Error message</p>
+			<div class="form-group">
+				<label for="categoryId">Category*</label>
+				<select th:field="*{categoryId}" required th:errorclass="error">
+					<option value="">-- Choose category --</option>
+					<option th:each="category : ${expenseCategories}" th:value="${category.id}" th:text="${category.name}">Category</option>
+				</select>
+				<div class="error" th:if="${#fields.hasErrors('categoryId')}">
+					<p th:each="err : ${#fields.errors('categoryId')}" th:text="${err}">Error message</p>
+				</div>
 			</div>
-		</div>
-		<div class="form-group">
-			<label for="description">Description</label>
-			<textarea th:field="*{description}" th:errorclass="error"></textarea>
-			<div class="error" th:if="${#fields.hasErrors('description')}">
-				<p th:each="err : ${#fields.errors('description')}" th:text="${err}">Error message</p>
+			<div class="form-group">
+				<label for="description">Description</label>
+				<textarea th:field="*{description}" th:errorclass="error"></textarea>
+				<div class="error" th:if="${#fields.hasErrors('description')}">
+					<p th:each="err : ${#fields.errors('description')}" th:text="${err}">Error message</p>
+				</div>
 			</div>
-		</div>
-		<div class="form-group">
-			<button class="submit-btn" type="submit">Create new expense</button>
-		</div>
-	</form>
-	<div class="expenses-list">
-		<div class="expenses-list-item" th:each="expense : ${expensesList}">
-			<div class="expense-date" th:text="|Date: ${expense.date}|">Date: 18-07-2019</div>
-			<div class="expense-value" th:text="|Value: ${expense.value}|">Value: 345.21$</div>
-			<div class="expense-category" th:text="|Category: ${expense.category.name}|">Category: sport</div>
-			<div class="expense-description" th:text="|Description: ${expense.description}|">Description: Definitely too much money!</div>
+			<div class="form-group">
+				<button class="submit-btn" type="submit">Create new expense</button>
+			</div>
+		</form>
+		<div class="expenses-list">
+			<div class="expenses-list-item" th:each="expense : ${expensesList}">
+				<div class="expense-date" th:text="|Date: ${expense.date}|">Date: 18-07-2019</div>
+				<div class="expense-value" th:text="|Value: ${expense.value}|">Value: 345.21$</div>
+				<div class="expense-category" th:text="|Category: ${expense.category.name}|">Category: sport</div>
+				<div class="expense-description" th:if="${expense.description != null}" th:text="|Description: ${expense.description}|">Description: Definitely too much money!</div>
+				<a class="remove-btn" href="#">Remove</a>
+			</div>
 		</div>
 	</div>
 </body>
