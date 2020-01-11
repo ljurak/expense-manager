@@ -1,9 +1,11 @@
 package com.expense.app.expense.service;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.expense.app.expense.dto.command.ExpenseCreateCommand;
+import com.expense.app.expense.dto.command.ExpenseDeleteCommand;
 import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.entity.ExpenseEntity;
 import com.expense.app.expense.exception.CategoryNotFoundException;
@@ -46,5 +48,19 @@ public class ExpenseComandServiceImpl implements ExpenseCommandService {
 				.build();
 		
 		expenseRepo.save(expense);		
-	}	
+	}
+	
+	@Override
+	public void deleteExpense(ExpenseDeleteCommand command) {
+		ExpenseEntity expense = expenseRepo.findById(command.getId()).orElse(null);
+		
+		if (expense != null) {
+			String username = expense.getUser().getUsername();
+			if (!username.equals(command.getUsername())) {
+				throw new AccessDeniedException(null);
+			}
+			
+			expenseRepo.deleteById(command.getId());
+		}
+	}
 }

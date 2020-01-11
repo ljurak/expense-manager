@@ -6,10 +6,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.expense.app.expense.dto.command.ExpenseCreateCommand;
+import com.expense.app.expense.dto.command.ExpenseDeleteCommand;
 import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.repo.CategoryRepo;
 import com.expense.app.expense.service.ExpenseCommandService;
@@ -31,7 +34,7 @@ public class ExpenseCommandController {
 		return categoryRepo.findAll();
 	}
 	
-	@PostMapping("/expenses")
+	@PostMapping("/expenses/create")
 	public String createExpense(@ModelAttribute("expenseCommand") @Valid ExpenseCreateCommand command, BindingResult result,
 			Authentication authentication) {
 		if (result.hasErrors()) {
@@ -46,6 +49,15 @@ public class ExpenseCommandController {
 		command.setUsername(username);
 		
 		expenseService.createExpense(command);
+		return "redirect:/expenses";
+	}
+	
+	@GetMapping("/expenses/delete/{id}")
+	public String deleteExpense(@PathVariable long id, Authentication authentication) {
+		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+		ExpenseDeleteCommand command = new ExpenseDeleteCommand(id, username);
+		
+		expenseService.deleteExpense(command);
 		return "redirect:/expenses";
 	}
 }

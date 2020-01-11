@@ -11,14 +11,14 @@
 	<div class="container">
 		<header class="page-header">
 			<div class="user-info" sec:authorize="isAuthenticated()">
-				Logged in as <span sec:authentication="principal.username">User</span>
+				Logged in as: <span sec:authentication="principal.username">User</span>
 			</div>
 			<form class="logout-form" action="#" th:action="@{/perform-logout}" method="post">
 				<button class="submit-btn" type="submit">Log out</button>
 			</form>
 		</header>
 		<main class="main-content">
-			<form class="expense-form" action="#" th:action="@{/expenses}" th:object="${expenseCommand}" method="post">
+			<form class="expense-form" action="#" th:action="@{/expenses/create}" th:object="${expenseCommand}" method="post">
 				<div class="form-group">
 					<label for="date">Date*</label>
 					<input th:field="*{date}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error">
@@ -86,9 +86,9 @@
 						<span class="title">Description:</span>
 						<span class="value" th:text="${expense.description}">Definitely too much money!</span>
 					</div>
-					<a class="remove-btn" href="#">Remove</a>
+					<a class="remove-btn" href="#" th:href="@{|/expenses/delete/${expense.id}|}">Remove</a>
 				</div>
-				<ul class="pagination-control" th:if="${pageCount > 1}">
+				<ul class="pagination-control" th:if="${pageCount > 1 && !#lists.isEmpty(expensesList)}">
 					<li class="pagination-control-item">
 						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses}"> &lt;&lt; First page</a>
 					</li>
