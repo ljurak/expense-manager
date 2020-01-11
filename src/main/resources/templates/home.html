@@ -17,6 +17,19 @@
 				<button class="submit-btn" type="submit">Log out</button>
 			</form>
 		</header>
+		<aside>
+			<form class="search-form" action="#" method="get">
+				<label for="startDate">From</label>
+				<input id="startDate" type="text" placeholder="YYYY-MM-DD">
+				<label for="endDate">To</label>
+				<input id="endDate" type="text" placeholder="YYYY-MM-DD">
+				<label for="searchCategory">Category</label>
+				<select id="searchCategory">
+					<option>-- Choose category --</option>
+				</select>
+				<button type="submit">Search</button>
+			</form>
+		</aside>
 		<main class="main-content">
 			<form class="expense-form" action="#" th:action="@{/expenses/create}" th:object="${expenseCommand}" method="post">
 				<div class="form-group">
