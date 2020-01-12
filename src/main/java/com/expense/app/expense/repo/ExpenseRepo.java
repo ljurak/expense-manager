@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.expense.app.expense.entity.ExpenseEntity;
 
 @Repository
-public interface ExpenseRepo extends CrudRepository<ExpenseEntity, Long> {
+public interface ExpenseRepo extends CrudRepository<ExpenseEntity, Long>, CustomizedExpenseRepo {
 	
 	@Query("select e from ExpenseEntity e where e.user.username = :username")
 	Page<ExpenseEntity> findByUsername(@Param("username") String username, Pageable pageable);
