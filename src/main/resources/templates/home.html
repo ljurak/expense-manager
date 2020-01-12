@@ -17,21 +17,54 @@
 				<button class="submit-btn" type="submit">Log out</button>
 			</form>
 		</header>
-		<aside>
-			<form class="search-form" action="#" method="get">
-				<label for="startDate">From</label>
-				<input id="startDate" type="text" placeholder="YYYY-MM-DD">
-				<label for="endDate">To</label>
-				<input id="endDate" type="text" placeholder="YYYY-MM-DD">
-				<label for="searchCategory">Category</label>
-				<select id="searchCategory">
-					<option>-- Choose category --</option>
-				</select>
-				<button type="submit">Search</button>
+		<aside class="sidebar">
+			<h2 class="search-form-header">Search filters</h2>
+			<form class="search-form" action="#" th:action="@{/expenses/show}" th:object="${expenseFilterQuery}" method="get">
+				<div class="form-group">
+					<label for="startDate">From</label>
+					<input th:field="*{startDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('startDate')}">
+						<p th:each="err : ${#fields.errors('startDate')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="endDate">To</label>
+					<input th:field="*{endDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('endDate')}">
+						<p th:each="err : ${#fields.errors('endDate')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="searchCategoryId">Category</label>
+					<select th:field="*{searchCategoryId}" th:errorclass="error">
+						<option value="">All Categories</option>
+						<option th:each="category : ${expenseCategories}" th:value="${category.id}" th:text="${category.name}">Category</option>
+					</select>
+					<div class="error" th:if="${#fields.hasErrors('searchCategoryId')}">
+						<p th:each="err : ${#fields.errors('searchCategoryId')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="minValue">Min value</label>
+					<input th:field="*{minValue}" type="text" th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('minValue')}">
+						<p th:each="err : ${#fields.errors('minValue')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="maxValue">Max value</label>
+					<input th:field="*{maxValue}" type="text" th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('maxValue')}">
+						<p th:each="err : ${#fields.errors('maxValue')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<button class="submit-btn" type="submit">Search</button>
+				</div>
 			</form>
 		</aside>
 		<main class="main-content">
-			<form class="expense-form" action="#" th:action="@{/expenses/create}" th:object="${expenseCommand}" method="post">
+			<form class="expense-form" action="#" th:action="@{/expenses/create}" th:object="${expenseCreateCommand}" method="post">
 				<div class="form-group">
 					<label for="date">Date*</label>
 					<input th:field="*{date}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error">
