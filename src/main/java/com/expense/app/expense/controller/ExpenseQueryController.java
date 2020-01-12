@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.entity.ExpenseEntity;
 import com.expense.app.expense.repo.CategoryRepo;
 import com.expense.app.expense.repo.ExpenseRepo;
-import com.expense.app.expense.repo.PageWrapper;
+import com.expense.app.expense.repo.ExpenseSpecification;
 
 @Controller
 public class ExpenseQueryController {
@@ -70,17 +71,19 @@ public class ExpenseQueryController {
 		model.addAttribute("expenseCreateCommand", new ExpenseCreateCommand());
 		
 		if (result.hasErrors()) {
-			return "home";
+			return "expenseFilter";
 		}
 		
 		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
 		query.setUsername(username);
 		
-		PageWrapper<ExpenseEntity> pageWrapper = expenseRepo.findAllByFilter(query, PageRequest.of(page, 15, Sort.by("date").descending()));
+		Specification<ExpenseEntity> specification = new ExpenseSpecification(query);
+		Page<ExpenseEntity> pageWrapper = 
+				expenseRepo.findAll(specification, PageRequest.of(page, 15, Sort.by("date").descending()));
 		
 		model.addAttribute("expensesList", pageWrapper.getContent());
 		model.addAttribute("pageCount", pageWrapper.getTotalPages());
-		model.addAttribute("currentPage", pageWrapper.getCurrentPage());
+		model.addAttribute("currentPage", pageWrapper.getNumber());
 		
 		return "expenseFilter";
 	}
