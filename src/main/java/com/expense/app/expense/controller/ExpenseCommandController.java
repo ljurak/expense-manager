@@ -35,7 +35,7 @@ public class ExpenseCommandController {
 	}
 	
 	@PostMapping("/expenses/create")
-	public String createExpense(@ModelAttribute("expenseCommand") @Valid ExpenseCreateCommand command, BindingResult result,
+	public String createExpense(@ModelAttribute("expenseCreateCommand") @Valid ExpenseCreateCommand command, BindingResult result,
 			Authentication authentication) {
 		if (result.hasErrors()) {
 			return "home";
