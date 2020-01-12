@@ -26,6 +26,19 @@
 	color: #f00;
 }
 
+/* SIDEBAR */
+
+.sidebar {
+	width: 300px;
+	padding-right: 20px;
+}
+
+/* MAIN CONTENT */
+
+.main-content {
+	width: 600px;
+}
+
 /* PAGE FOOTER */
 
 .page-footer {
@@ -36,6 +49,69 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+/* EXPENSE SEARCH FORM */
+
+.search-form-header {
+	margin: 0 0 15px;
+	font-size: 22px;
+	font-weight: normal;
+}
+
+.search-form {
+
+}
+
+.search-form .form-group {
+	margin-bottom: 15px;
+}
+
+.search-form label {
+	display: block;
+	margin-bottom: 8px;
+}
+
+.search-form input,
+.search-form select {
+	display: block;
+	width: 100%;
+	padding: 5px;
+	border: 1px solid rgba(0,0,0,.3);
+}
+
+.search-form input.error,
+.search-form select.error {
+	border-color: rgba(255,0,0,);
+}
+
+.search-form input:focus,
+.search-form select:focus {
+	box-shadow: inset 0 0 1px rgba(0,0,0,.3);
+}
+
+.search-form .submit-btn {
+	display: block;
+	padding: 5px 20px;
+	background-color: transparent;
+	border: 2px solid #000;
+	margin: 0 auto;
+	transition: all 0.3s;
+}
+
+.search-form .submit-btn:hover {
+	border-color: #00d000;
+	color: #00d000;
+}
+
+.search-form div.error {
+	width: 100%;
+}
+
+.search-form div.error p {
+	margin: 8px 0 -8px;
+	color: #f00;
+	font-style: italic;
 }
 
 /* EXPENSE CREATE FORM */
@@ -168,6 +244,8 @@
 	margin: 10px 0;
 	display: flex;
 	font-size: 14px;
+	height: 16px;
+	line-height: 16px;
 }
 
 .pagination-control .pagination-control-item {

@@ -10,7 +10,7 @@ body {
 }
 
 .container {
-	width: 630px;
+	width: 930px;
 	min-height: 100vh;
 	margin: 0 auto;
 	padding: 50px 15px;
@@ -18,4 +18,5 @@ body {
 	border-left: 1px solid #555;
 	border-right: 1px solid #555;
 	position: relative;
+	display: flex;
 }
