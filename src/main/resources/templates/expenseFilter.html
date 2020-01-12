@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<title>Expense Manager</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=latin-ext" rel="stylesheet">
+	<link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
+	<link rel="stylesheet" href="../static/css/expenses.css" th:href="@{/css/expenses.css}">
+</head>
+<body>
+	<div class="container">
+		<header class="page-header">
+			<div class="user-info" sec:authorize="isAuthenticated()">
+				Logged in as: <span sec:authentication="principal.username">User</span>
+			</div>
+			<form class="logout-form" action="#" th:action="@{/perform-logout}" method="post">
+				<button class="submit-btn" type="submit">Log out</button>
+			</form>
+		</header>
+		<aside class="sidebar">
+			<h2 class="search-form-header">Search filters</h2>
+			<form class="search-form" action="#" th:action="@{/expenses/show}" th:object="${expenseFilterQuery}" method="get">
+				<div class="form-group">
+					<label for="startDate">From</label>
+					<input th:field="*{startDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('startDate')}">
+						<p th:each="err : ${#fields.errors('startDate')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="endDate">To</label>
+					<input th:field="*{endDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('endDate')}">
+						<p th:each="err : ${#fields.errors('endDate')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="searchCategoryId">Category</label>
+					<select th:field="*{searchCategoryId}" th:errorclass="error">
+						<option value="">All Categories</option>
+						<option th:each="category : ${expenseCategories}" th:value="${category.id}" th:text="${category.name}">Category</option>
+					</select>
+					<div class="error" th:if="${#fields.hasErrors('searchCategoryId')}">
+						<p th:each="err : ${#fields.errors('searchCategoryId')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="minValue">Min value</label>
+					<input th:field="*{minValue}" type="text" th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('minValue')}">
+						<p th:each="err : ${#fields.errors('minValue')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="maxValue">Max value</label>
+					<input th:field="*{maxValue}" type="text" th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('maxValue')}">
+						<p th:each="err : ${#fields.errors('maxValue')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<button class="submit-btn" type="submit">Search</button>
+				</div>
+			</form>
+		</aside>
+		<main class="main-content">
+			<form class="expense-form" action="#" th:action="@{/expenses/create}" th:object="${expenseCreateCommand}" method="post">
+				<div class="form-group">
+					<label for="date">Date*</label>
+					<input th:field="*{date}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('date')}">
+						<p th:each="err : ${#fields.errors('date')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="value">Value*</label>
+					<input th:field="*{value}" type="text" required th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('value')}">
+						<p th:each="err : ${#fields.errors('value')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="categoryId">Category*</label>
+					<select th:field="*{categoryId}" required th:errorclass="error">
+						<option value="">-- Choose category --</option>
+						<option th:each="category : ${expenseCategories}" th:value="${category.id}" th:text="${category.name}">Category</option>
+					</select>
+					<div class="error" th:if="${#fields.hasErrors('categoryId')}">
+						<p th:each="err : ${#fields.errors('categoryId')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="description">Description</label>
+					<textarea th:field="*{description}" th:errorclass="error"></textarea>
+					<div class="error" th:if="${#fields.hasErrors('description')}">
+						<p th:each="err : ${#fields.errors('description')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<button class="submit-btn" type="submit">Create new expense</button>
+				</div>
+			</form>
+			<div class="expenses-list">
+				<ul class="pagination-control" th:if="${pageCount > 1}" th:with="query=${expenseFilterQuery}">
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses/show(startDate=${query.startDate},endDate=${query.endDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=0)}"> &lt;&lt; First page</a>
+					</li>
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses/show(startDate=${query.startDate},endDate=${query.endDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${currentPage - 1})}">&lt; Previous page</a>
+					</li>
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses/show(startDate=${query.startDate},endDate=${query.endDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${currentPage + 1})}">Next page &gt;</a>
+					</li>
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses/show(startDate=${query.startDate},endDate=${query.endDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${pageCount - 1})}">Last page  &gt;&gt;</a>
+					</li>				
+				</ul>
+				<div class="expenses-list-item" th:each="expense : ${expensesList}">
+					<div class="expense-date">
+						<span class="title">Date:</span>
+						<span class="value" th:text="${expense.date}">18-07-2019</span>
+					</div>
+					<div class="expense-value">
+						<span class="title">Value:</span>
+						<span class="value" th:text="${expense.value}">345.21$</span>
+					</div>
+					<div class="expense-category">
+						<span class="title">Category:</span>
+						<span class="value" th:text="${expense.category.name}">sport</span>
+					</div>
+					<div class="expense-description" th:if="${expense.description != null}">
+						<span class="title">Description:</span>
+						<span class="value" th:text="${expense.description}">Definitely too much money!</span>
+					</div>
+					<a class="remove-btn" href="#" th:href="@{|/expenses/delete/${expense.id}|}">Remove</a>
+				</div>
+				<ul class="pagination-control" th:if="${pageCount > 1 && !#lists.isEmpty(expensesList)}" th:with="query=${expenseFilterQuery}">
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses/show(startDate=${query.startDate},endDate=${query.endDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=0)}"> &lt;&lt; First page</a>
+					</li>
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses/show(startDate=${query.startDate},endDate=${query.endDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${currentPage - 1})}">&lt; Previous page</a>
+					</li>
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses/show(startDate=${query.startDate},endDate=${query.endDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${currentPage + 1})}">Next page &gt;</a>
+					</li>
+					<li class="pagination-control-item">
+						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses/show(startDate=${query.startDate},endDate=${query.endDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${pageCount - 1})}">Last page  &gt;&gt;</a>
+					</li>			
+				</ul>
+			</div>
+		</main>
+		<footer class="page-footer">
+			<p>Expense Manager 2019</p>
+		</footer>
+	</div>
+</body>
+</html>
