@@ -78,6 +78,8 @@
 	width: 100%;
 	padding: 5px;
 	border: 1px solid rgba(0,0,0,.3);
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
 }
 
 .search-form input.error,
@@ -116,6 +118,12 @@
 
 /* EXPENSE CREATE FORM */
 
+.create-form-header {
+	margin: 0 0 15px;
+	font-size: 22px;
+	font-weight: normal;
+}
+
 .expense-form {
 	margin: 0 auto;
 	padding: 20px;
@@ -145,6 +153,8 @@
 	width: 75%;
 	padding: 5px;
 	border: 1px solid rgba(0,0,0,.3);
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
 }
 
 .expense-form input.error,
