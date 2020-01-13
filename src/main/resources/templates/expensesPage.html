@@ -3,7 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Expense Manager</title>
-	<link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=latin-ext" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=latin-ext" rel="stylesheet"> 
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 	<link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
 	<link rel="stylesheet" href="../static/css/expenses.css" th:href="@{/css/expenses.css}">
 </head>
@@ -22,14 +23,14 @@
 			<form class="search-form" action="#" th:action="@{/expenses/show}" th:object="${expenseFilterQuery}" method="get">
 				<div class="form-group">
 					<label for="startDate">From</label>
-					<input th:field="*{startDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error">
+					<input th:field="*{startDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
 					<div class="error" th:if="${#fields.hasErrors('startDate')}">
 						<p th:each="err : ${#fields.errors('startDate')}" th:text="${err}">Error message</p>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="endDate">To</label>
-					<input th:field="*{endDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error">
+					<input th:field="*{endDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
 					<div class="error" th:if="${#fields.hasErrors('endDate')}">
 						<p th:each="err : ${#fields.errors('endDate')}" th:text="${err}">Error message</p>
 					</div>
@@ -64,10 +65,11 @@
 			</form>
 		</aside>
 		<main class="main-content">
+			<h2 class="create-form-header">Create new expense</h2>
 			<form class="expense-form" action="#" th:action="@{/expenses/create}" th:object="${expenseCreateCommand}" method="post">
 				<div class="form-group">
 					<label for="date">Date*</label>
-					<input th:field="*{date}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error">
+					<input th:field="*{date}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error" autocomplete="off">
 					<div class="error" th:if="${#fields.hasErrors('date')}">
 						<p th:each="err : ${#fields.errors('date')}" th:text="${err}">Error message</p>
 					</div>
@@ -154,5 +156,15 @@
 			<p>Expense Manager 2019</p>
 		</footer>
 	</div>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script>
+		const startDate = document.getElementById('startDate');
+		const endDate = document.getElementById('endDate');
+		const createDate = document.getElementById('date');
+		
+		flatpickr(startDate, { maxDate: 'today' });
+		flatpickr(endDate, { maxDate: 'today' });
+		flatpickr(createDate, { maxDate: 'today' });
+	</script>
 </body>
 </html>
