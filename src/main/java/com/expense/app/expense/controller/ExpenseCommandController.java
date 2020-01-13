@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.expense.app.expense.dto.command.ExpenseCreateCommand;
 import com.expense.app.expense.dto.command.ExpenseDeleteCommand;
@@ -53,11 +54,13 @@ public class ExpenseCommandController {
 	}
 	
 	@GetMapping("/expenses/delete/{id}")
-	public String deleteExpense(@PathVariable long id, Authentication authentication) {
+	public String deleteExpense(@PathVariable long id, Authentication authentication, @RequestHeader("Referer") String refererHeader) {
 		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
 		ExpenseDeleteCommand command = new ExpenseDeleteCommand(id, username);
 		
 		expenseService.deleteExpense(command);
-		return "redirect:/expenses";
+		
+		String redirectUrl = refererHeader.substring(refererHeader.indexOf("/expenses"));
+		return "redirect:" + redirectUrl;
 	}
 }
