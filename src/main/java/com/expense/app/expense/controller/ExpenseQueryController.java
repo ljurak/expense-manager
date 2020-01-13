@@ -71,7 +71,7 @@ public class ExpenseQueryController {
 		model.addAttribute("expenseCreateCommand", new ExpenseCreateCommand());
 		
 		if (result.hasErrors()) {
-			return "expenseFilter";
+			return "expensesPage";
 		}
 		
 		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
@@ -85,6 +85,6 @@ public class ExpenseQueryController {
 		model.addAttribute("pageCount", pageWrapper.getTotalPages());
 		model.addAttribute("currentPage", pageWrapper.getNumber());
 		
-		return "expenseFilter";
+		return "expensesPage";
 	}
 }
