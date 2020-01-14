@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.expense.app.expense.dto.command.ExpenseCreateCommand;
 import com.expense.app.expense.dto.query.ExpenseFilterQuery;
+import com.expense.app.expense.dto.query.ExpenseReportQuery;
 import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.entity.ExpenseEntity;
 import com.expense.app.expense.repo.CategoryRepo;
@@ -53,6 +54,7 @@ public class ExpenseQueryController {
 				username, PageRequest.of(page, size, Sort.by("date").descending()));
 		
 		model.addAttribute("expenseCreateCommand", new ExpenseCreateCommand());
+		model.addAttribute("expenseReportQuery", new ExpenseReportQuery());
 		model.addAttribute("expenseFilterQuery", new ExpenseFilterQuery());
 		model.addAttribute("expensesList", expensesPage.getContent());
 		model.addAttribute("pageCount", expensesPage.getTotalPages());
@@ -69,6 +71,7 @@ public class ExpenseQueryController {
 			Model model) {
 		
 		model.addAttribute("expenseCreateCommand", new ExpenseCreateCommand());
+		model.addAttribute("expenseReportQuery", new ExpenseReportQuery());
 		
 		if (result.hasErrors()) {
 			return "expensesPage";

@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.expense.app.expense.dto.command.ExpenseCreateCommand;
 import com.expense.app.expense.dto.command.ExpenseDeleteCommand;
+import com.expense.app.expense.dto.query.ExpenseFilterQuery;
+import com.expense.app.expense.dto.query.ExpenseReportQuery;
 import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.repo.CategoryRepo;
 import com.expense.app.expense.service.ExpenseCommandService;
@@ -37,7 +40,10 @@ public class ExpenseCommandController {
 	
 	@PostMapping("/expenses/create")
 	public String createExpense(@ModelAttribute("expenseCreateCommand") @Valid ExpenseCreateCommand command, BindingResult result,
-			Authentication authentication) {
+			Authentication authentication, Model model) {
+		model.addAttribute("expenseFilterQuery", new ExpenseFilterQuery());
+		model.addAttribute("expenseReportQuery", new ExpenseReportQuery());
+		
 		if (result.hasErrors()) {
 			return "home";
 		}
