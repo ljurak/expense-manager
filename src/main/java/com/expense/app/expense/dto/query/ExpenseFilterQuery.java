@@ -12,11 +12,11 @@ public class ExpenseFilterQuery {
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@PastOrPresent(message = "{validation.pastOrPresent}")
-	private LocalDate startDate;
+	private LocalDate searchStartDate;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@PastOrPresent(message = "{validation.pastOrPresent}")
-	private LocalDate endDate;
+	private LocalDate searchEndDate;
 	
 	private Long searchCategoryId;
 	
@@ -28,20 +28,20 @@ public class ExpenseFilterQuery {
 	
 	private String username;
 
-	public LocalDate getStartDate() {
-		return startDate;
+	public LocalDate getSearchStartDate() {
+		return searchStartDate;
 	}
 
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
+	public void setSearchStartDate(LocalDate searchStartDate) {
+		this.searchStartDate = searchStartDate;
 	}
 
-	public LocalDate getEndDate() {
-		return endDate;
+	public LocalDate getSearchEndDate() {
+		return searchEndDate;
 	}
 
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
+	public void setSearchEndDate(LocalDate searchEndDate) {
+		this.searchEndDate = searchEndDate;
 	}
 
 	public Long getSearchCategoryId() {
@@ -79,8 +79,8 @@ public class ExpenseFilterQuery {
 	@Override
 	public String toString() {
 		return "ExpenseFilterQuery ["
-				+ "startDate=" + startDate 
-				+ ", endDate=" + endDate 
+				+ "searchStartDate=" + searchStartDate 
+				+ ", searchEndDate=" + searchEndDate 
 				+ ", searchCategoryId="	+ searchCategoryId 
 				+ ", minValue=" + minValue 
 				+ ", maxValue=" + maxValue 

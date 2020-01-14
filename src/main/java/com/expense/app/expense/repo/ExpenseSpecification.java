@@ -28,11 +28,11 @@ public class ExpenseSpecification implements Specification<ExpenseEntity> {
 		List<Predicate> predicates = new ArrayList<>();
 		
 		predicates.add(criteriaBuilder.equal(root.get("user").get("username"), filters.getUsername()));
-		if (filters.getStartDate() != null) {
-			predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("date"), filters.getStartDate()));
+		if (filters.getSearchStartDate() != null) {
+			predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("date"), filters.getSearchStartDate()));
 		}
-		if (filters.getEndDate() != null) {
-			predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("date"), filters.getEndDate()));
+		if (filters.getSearchEndDate() != null) {
+			predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("date"), filters.getSearchEndDate()));
 		}
 		if (filters.getSearchCategoryId() != null) {
 			predicates.add(criteriaBuilder.equal(root.get("category").get("id"), filters.getSearchCategoryId()));
