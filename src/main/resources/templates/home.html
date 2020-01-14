@@ -22,17 +22,17 @@
 			<h2 class="search-form-header">Search filters</h2>
 			<form class="search-form" action="#" th:action="@{/expenses/show}" th:object="${expenseFilterQuery}" method="get">
 				<div class="form-group">
-					<label for="startDate">From</label>
-					<input th:field="*{startDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error">
-					<div class="error" th:if="${#fields.hasErrors('startDate')}">
-						<p th:each="err : ${#fields.errors('startDate')}" th:text="${err}">Error message</p>
+					<label for="searchStartDate">From</label>
+					<input th:field="*{searchStartDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
+					<div class="error" th:if="${#fields.hasErrors('searchStartDate')}">
+						<p th:each="err : ${#fields.errors('searchStartDate')}" th:text="${err}">Error message</p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="endDate">To</label>
-					<input th:field="*{endDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error">
-					<div class="error" th:if="${#fields.hasErrors('endDate')}">
-						<p th:each="err : ${#fields.errors('endDate')}" th:text="${err}">Error message</p>
+					<label for="searchEndDate">To</label>
+					<input th:field="*{searchEndDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
+					<div class="error" th:if="${#fields.hasErrors('searchEndDate')}">
+						<p th:each="err : ${#fields.errors('searchEndDate')}" th:text="${err}">Error message</p>
 					</div>
 				</div>
 				<div class="form-group">
@@ -61,6 +61,36 @@
 				</div>
 				<div class="form-group">
 					<button class="submit-btn" type="submit">Search</button>
+				</div>
+			</form>
+			<h2 class="report-form-header">Generate report</h2>
+			<form class="report-form" action="#" th:action="@{/expenses/show}" th:object="${expenseReportQuery}" method="get">
+				<div class="form-group">
+					<label for="reportStartDate">From*</label>
+					<input th:field="*{reportStartDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
+					<div class="error" th:if="${#fields.hasErrors('reportStartDate')}">
+						<p th:each="err : ${#fields.errors('reportStartDate')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="reportEndDate">To*</label>
+					<input th:field="*{reportEndDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
+					<div class="error" th:if="${#fields.hasErrors('reportEndDate')}">
+						<p th:each="err : ${#fields.errors('reportEndDate')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="reportCategoryId">Category</label>
+					<select th:field="*{reportCategoryId}" th:errorclass="error">
+						<option value="">All Categories</option>
+						<option th:each="category : ${expenseCategories}" th:value="${category.id}" th:text="${category.name}">Category</option>
+					</select>
+					<div class="error" th:if="${#fields.hasErrors('reportCategoryId')}">
+						<p th:each="err : ${#fields.errors('reportCategoryId')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<button class="submit-btn" type="submit">Generate</button>
 				</div>
 			</form>
 		</aside>
@@ -158,12 +188,16 @@
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 	<script>
-		const startDate = document.getElementById('startDate');
-		const endDate = document.getElementById('endDate');
+		const searchStartDate = document.getElementById('searchStartDate');
+		const searchEndDate = document.getElementById('searchEndDate');
+		const reportStartDate = document.getElementById('reportStartDate');
+		const reportEndDate = document.getElementById('reportEndDate');
 		const createDate = document.getElementById('date');
 		
-		flatpickr(startDate, { maxDate: 'today' });
-		flatpickr(endDate, { maxDate: 'today' });
+		flatpickr(searchStartDate, { maxDate: 'today' });
+		flatpickr(searchEndDate, { maxDate: 'today' });
+		flatpickr(reportStartDate, { maxDate: 'today' });
+		flatpickr(reportEndDate, { maxDate: 'today' });
 		flatpickr(createDate, { maxDate: 'today' });
 	</script>
 </body>
