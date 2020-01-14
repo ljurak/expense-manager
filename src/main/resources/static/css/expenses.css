@@ -84,7 +84,7 @@
 
 .search-form input.error,
 .search-form select.error {
-	border-color: rgba(255,0,0,);
+	border-color: rgba(255,0,0,1);
 }
 
 .search-form input:focus,
@@ -95,9 +95,9 @@
 .search-form .submit-btn {
 	display: block;
 	padding: 5px 20px;
+	margin: 0 auto;
 	background-color: transparent;
 	border: 2px solid #000;
-	margin: 0 auto;
 	transition: all 0.3s;
 }
 
@@ -111,6 +111,71 @@
 }
 
 .search-form div.error p {
+	margin: 8px 0 -8px;
+	color: #f00;
+	font-style: italic;
+}
+
+/* EXPENSE REPORT FORM */
+
+.report-form-header {
+	margin: 40px 0 15px;
+	font-size: 22px;
+	font-weight: normal;
+}
+
+.report-form {
+
+}
+
+.report-form .form-group {
+	margin-bottom: 15px;
+}
+
+.report-form label {
+	display: block;
+	margin-bottom: 8px;
+}
+
+.report-form input,
+.report-form select {
+	display: block;
+	width: 100%;
+	padding: 5px;
+	border: 1px solid rgba(0,0,0,.3);
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+}
+
+.report-form input.error,
+.report-form select.error {
+	border-color: rgba(255,0,0,1);
+}
+
+.report-form input:focus,
+.report-form select:focus {
+	box-shadow: inset 0 0 1px rgba(0,0,0,.3);
+}
+
+.report-form .submit-btn {
+	display: block;
+	padding: 5px 20px;
+	background-color: transparent;
+	border: 2px solid #000;
+	margin: 0 auto;
+	transition: all 0.3s;
+}
+
+.report-form .submit-btn:hover {
+	border-color: #00d000;
+	color: #00d000;
+}
+
+.report-form div.error {
+	width: 100%;
+}
+
+.report-form div.error p {
 	margin: 8px 0 -8px;
 	color: #f00;
 	font-style: italic;
@@ -160,7 +225,7 @@
 .expense-form input.error,
 .expense-form select.error,
 .expense-form textarea.error {
-	border-color: rgba(255,0,0,);
+	border-color: rgba(255,0,0,1);
 }
 
 .expense-form input:focus,
