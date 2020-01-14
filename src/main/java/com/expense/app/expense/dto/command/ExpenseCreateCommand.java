@@ -12,7 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class ExpenseCreateCommand {
 	
-	@NotNull(message = "{validation.notNull}")
+	@NotNull(message = "{validation.required}")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@PastOrPresent(message = "{validation.pastOrPresent}")
 	private LocalDate date;
