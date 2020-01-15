@@ -138,13 +138,13 @@
 						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses}"> &lt;&lt; First page</a>
 					</li>
 					<li class="pagination-control-item">
-						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses(page=${currentPage - 1},size=15)}">&lt; Previous page</a>
+						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses(page=${currentPage - 1})}">&lt; Previous page</a>
 					</li>
 					<li class="pagination-control-item">
-						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses(page=${currentPage + 1},size=15)}">Next page &gt;</a>
+						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses(page=${currentPage + 1})}">Next page &gt;</a>
 					</li>
 					<li class="pagination-control-item">
-						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses(page=${pageCount - 1},size=15)}">Last page  &gt;&gt;</a>
+						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses(page=${pageCount - 1})}">Last page  &gt;&gt;</a>
 					</li>				
 				</ul>
 				<div class="expenses-list-item" th:each="expense : ${expensesList}">
@@ -171,13 +171,13 @@
 						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses}"> &lt;&lt; First page</a>
 					</li>
 					<li class="pagination-control-item">
-						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses(page=${currentPage - 1},size=15)}">&lt; Previous page</a>
+						<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses(page=${currentPage - 1})}">&lt; Previous page</a>
 					</li>
 					<li class="pagination-control-item">
-						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses(page=${currentPage + 1},size=15)}">Next page &gt;</a>
+						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses(page=${currentPage + 1})}">Next page &gt;</a>
 					</li>
 					<li class="pagination-control-item">
-						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses(page=${pageCount - 1},size=15)}">Last page  &gt;&gt;</a>
+						<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses(page=${pageCount - 1})}">Last page  &gt;&gt;</a>
 					</li>				
 				</ul>
 			</div>

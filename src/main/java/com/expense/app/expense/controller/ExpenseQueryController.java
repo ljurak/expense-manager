@@ -2,6 +2,7 @@ package com.expense.app.expense.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -31,6 +32,9 @@ public class ExpenseQueryController {
 	
 	private CategoryRepo categoryRepo;
 	
+	@Value("${expenses.pageSize}")
+	private int pageSize;
+	
 	public ExpenseQueryController(ExpenseRepo expenseRepo, CategoryRepo categoryRepo) {
 		this.expenseRepo = expenseRepo;
 		this.categoryRepo = categoryRepo;
@@ -44,14 +48,13 @@ public class ExpenseQueryController {
 	@GetMapping("/expenses")
 	public String showExpensesPage(
 			@RequestParam(required = false, defaultValue = "0") int page, 
-			@RequestParam(required = false, defaultValue = "15") int size, 
 			Authentication authentication, 
 			Model model) {
 		
 		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
 		
 		Page<ExpenseEntity> expensesPage = expenseRepo.findByUsername(
-				username, PageRequest.of(page, size, Sort.by("date").descending()));
+				username, PageRequest.of(page, pageSize, Sort.by("date").descending()));
 		
 		model.addAttribute("expenseCreateCommand", new ExpenseCreateCommand());
 		model.addAttribute("expenseReportQuery", new ExpenseReportQuery());
@@ -82,7 +85,7 @@ public class ExpenseQueryController {
 		
 		Specification<ExpenseEntity> specification = new ExpenseSpecification(query);
 		Page<ExpenseEntity> pageWrapper = 
-				expenseRepo.findAll(specification, PageRequest.of(page, 15, Sort.by("date").descending()));
+				expenseRepo.findAll(specification, PageRequest.of(page, pageSize, Sort.by("date").descending()));
 		
 		model.addAttribute("expensesList", pageWrapper.getContent());
 		model.addAttribute("pageCount", pageWrapper.getTotalPages());
