@@ -64,7 +64,7 @@
 				</div>
 			</form>
 			<h2 class="report-form-header">Generate report</h2>
-			<form class="report-form" action="#" th:action="@{/expenses/show}" th:object="${expenseReportQuery}" method="get">
+			<form class="report-form" action="#" th:action="@{/expenses/report}" th:object="${expenseReportQuery}" method="get">
 				<div class="form-group">
 					<label for="reportStartDate">From*</label>
 					<input th:field="*{reportStartDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
