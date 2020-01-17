@@ -13,13 +13,13 @@ import org.springframework.data.jpa.domain.Specification;
 import com.expense.app.expense.dto.query.ExpenseFilterQuery;
 import com.expense.app.expense.entity.ExpenseEntity;
 
-public class ExpenseSpecification implements Specification<ExpenseEntity> {
+public class ExpenseFilterSpecification implements Specification<ExpenseEntity> {
 	
 	private static final long serialVersionUID = -2848929613924124828L;
 	
 	private final ExpenseFilterQuery filters;
 	
-	public ExpenseSpecification(ExpenseFilterQuery filters) {
+	public ExpenseFilterSpecification(ExpenseFilterQuery filters) {
 		this.filters = filters;
 	}
 	

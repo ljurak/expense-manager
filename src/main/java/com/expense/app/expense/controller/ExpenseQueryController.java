@@ -23,7 +23,7 @@ import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.entity.ExpenseEntity;
 import com.expense.app.expense.repo.CategoryRepo;
 import com.expense.app.expense.repo.ExpenseRepo;
-import com.expense.app.expense.repo.ExpenseSpecification;
+import com.expense.app.expense.repo.ExpenseFilterSpecification;
 
 @Controller
 public class ExpenseQueryController {
@@ -83,7 +83,7 @@ public class ExpenseQueryController {
 		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
 		query.setUsername(username);
 		
-		Specification<ExpenseEntity> specification = new ExpenseSpecification(query);
+		Specification<ExpenseEntity> specification = new ExpenseFilterSpecification(query);
 		Page<ExpenseEntity> pageWrapper = 
 				expenseRepo.findAll(specification, PageRequest.of(page, pageSize, Sort.by("date").descending()));
 		
