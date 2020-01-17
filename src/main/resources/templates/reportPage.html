@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<title>Expense Manager</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=latin-ext" rel="stylesheet"> 
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
+	<link rel="stylesheet" href="../static/css/expenses.css" th:href="@{/css/expenses.css}">
+</head>
+<body>
+	<div class="container">
+		<header class="page-header">
+			<div class="user-info" sec:authorize="isAuthenticated()">
+				Logged in as: <span sec:authentication="principal.username">User</span>
+			</div>
+			<form class="logout-form" action="#" th:action="@{/perform-logout}" method="post">
+				<button class="submit-btn" type="submit">Log out</button>
+			</form>
+		</header>
+		<aside class="sidebar">
+			<h2 class="search-form-header">Search filters</h2>
+			<form class="search-form" action="#" th:action="@{/expenses/show}" th:object="${expenseFilterQuery}" method="get">
+				<div class="form-group">
+					<label for="searchStartDate">From</label>
+					<input th:field="*{searchStartDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
+					<div class="error" th:if="${#fields.hasErrors('searchStartDate')}">
+						<p th:each="err : ${#fields.errors('searchStartDate')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="searchEndDate">To</label>
+					<input th:field="*{searchEndDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
+					<div class="error" th:if="${#fields.hasErrors('searchEndDate')}">
+						<p th:each="err : ${#fields.errors('searchEndDate')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="searchCategoryId">Category</label>
+					<select th:field="*{searchCategoryId}" th:errorclass="error">
+						<option value="">All Categories</option>
+						<option th:each="category : ${expenseCategories}" th:value="${category.id}" th:text="${category.name}">Category</option>
+					</select>
+					<div class="error" th:if="${#fields.hasErrors('searchCategoryId')}">
+						<p th:each="err : ${#fields.errors('searchCategoryId')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="minValue">Min value</label>
+					<input th:field="*{minValue}" type="text" th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('minValue')}">
+						<p th:each="err : ${#fields.errors('minValue')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="maxValue">Max value</label>
+					<input th:field="*{maxValue}" type="text" th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('maxValue')}">
+						<p th:each="err : ${#fields.errors('maxValue')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<button class="submit-btn" type="submit">Search</button>
+				</div>
+			</form>
+			<h2 class="report-form-header">Generate report</h2>
+			<form class="report-form" action="#" th:action="@{/expenses/report}" th:object="${expenseReportQuery}" method="get">
+				<div class="form-group">
+					<label for="reportStartDate">From*</label>
+					<input th:field="*{reportStartDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
+					<div class="error" th:if="${#fields.hasErrors('reportStartDate')}">
+						<p th:each="err : ${#fields.errors('reportStartDate')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="reportEndDate">To*</label>
+					<input th:field="*{reportEndDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
+					<div class="error" th:if="${#fields.hasErrors('reportEndDate')}">
+						<p th:each="err : ${#fields.errors('reportEndDate')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="reportCategoryId">Category</label>
+					<select th:field="*{reportCategoryId}" th:errorclass="error">
+						<option value="">All Categories</option>
+						<option th:each="category : ${expenseCategories}" th:value="${category.id}" th:text="${category.name}">Category</option>
+					</select>
+					<div class="error" th:if="${#fields.hasErrors('reportCategoryId')}">
+						<p th:each="err : ${#fields.errors('reportCategoryId')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<button class="submit-btn" type="submit">Generate</button>
+				</div>
+			</form>
+		</aside>
+		<main class="main-content">
+			<h2 class="create-form-header">Create new expense</h2>
+			<form class="expense-form" action="#" th:action="@{/expenses/create}" th:object="${expenseCreateCommand}" method="post">
+				<div class="form-group">
+					<label for="date">Date*</label>
+					<input th:field="*{date}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error" autocomplete="off">
+					<div class="error" th:if="${#fields.hasErrors('date')}">
+						<p th:each="err : ${#fields.errors('date')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="value">Value*</label>
+					<input th:field="*{value}" type="text" required th:errorclass="error">
+					<div class="error" th:if="${#fields.hasErrors('value')}">
+						<p th:each="err : ${#fields.errors('value')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="categoryId">Category*</label>
+					<select th:field="*{categoryId}" required th:errorclass="error">
+						<option value="">-- Choose category --</option>
+						<option th:each="category : ${expenseCategories}" th:value="${category.id}" th:text="${category.name}">Category</option>
+					</select>
+					<div class="error" th:if="${#fields.hasErrors('categoryId')}">
+						<p th:each="err : ${#fields.errors('categoryId')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="description">Description</label>
+					<textarea th:field="*{description}" th:errorclass="error"></textarea>
+					<div class="error" th:if="${#fields.hasErrors('description')}">
+						<p th:each="err : ${#fields.errors('description')}" th:text="${err}">Error message</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<button class="submit-btn" type="submit">Create new expense</button>
+				</div>
+			</form>
+			
+		</main>
+		<footer class="page-footer">
+			<p>Expense Manager 2019</p>
+		</footer>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script>
+		const searchStartDate = document.getElementById('searchStartDate');
+		const searchEndDate = document.getElementById('searchEndDate');
+		const reportStartDate = document.getElementById('reportStartDate');
+		const reportEndDate = document.getElementById('reportEndDate');
+		const createDate = document.getElementById('date');
+		
+		flatpickr(searchStartDate, { maxDate: 'today' });
+		flatpickr(searchEndDate, { maxDate: 'today' });
+		flatpickr(reportStartDate, { maxDate: 'today' });
+		flatpickr(reportEndDate, { maxDate: 'today' });
+		flatpickr(createDate, { maxDate: 'today' });
+	</script>
+</body>
+</html>
