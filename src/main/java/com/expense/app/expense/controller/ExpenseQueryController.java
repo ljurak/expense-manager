@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.expense.app.expense.dto.ExpenseReportDto;
 import com.expense.app.expense.dto.command.ExpenseCreateCommand;
 import com.expense.app.expense.dto.query.ExpenseFilterQuery;
 import com.expense.app.expense.dto.query.ExpenseReportQuery;
@@ -23,6 +24,7 @@ import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.entity.ExpenseEntity;
 import com.expense.app.expense.repo.CategoryRepo;
 import com.expense.app.expense.repo.ExpenseRepo;
+import com.expense.app.expense.service.ExpenseQueryService;
 import com.expense.app.expense.repo.ExpenseFilterSpecification;
 
 @Controller
@@ -32,12 +34,15 @@ public class ExpenseQueryController {
 	
 	private CategoryRepo categoryRepo;
 	
+	private ExpenseQueryService expenseService;
+	
 	@Value("${expenses.pageSize}")
 	private int pageSize;
 	
-	public ExpenseQueryController(ExpenseRepo expenseRepo, CategoryRepo categoryRepo) {
+	public ExpenseQueryController(ExpenseRepo expenseRepo, CategoryRepo categoryRepo, ExpenseQueryService expenseService) {
 		this.expenseRepo = expenseRepo;
 		this.categoryRepo = categoryRepo;
+		this.expenseService = expenseService;
 	}
 	
 	@ModelAttribute("expenseCategories")
@@ -92,5 +97,28 @@ public class ExpenseQueryController {
 		model.addAttribute("currentPage", pageWrapper.getNumber());
 		
 		return "expensesPage";
+	}
+	
+	@GetMapping("/expenses/report")
+	public String showReportPage(
+			@ModelAttribute("expenseReportQuery") @Valid ExpenseReportQuery query,
+			BindingResult result,
+			Authentication authentication,
+			Model model) {
+		
+		model.addAttribute("expenseCreateCommand", new ExpenseCreateCommand());
+		model.addAttribute("expenseFilterQuery", new ExpenseFilterQuery());
+		
+		if (result.hasErrors()) {
+			return "reportPage";
+		}
+		
+		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+		query.setUsername(username);
+		
+		ExpenseReportDto report = expenseService.generateReport(query);
+		model.addAttribute("report", report);
+		
+		return "reportPage";
 	}
 }
