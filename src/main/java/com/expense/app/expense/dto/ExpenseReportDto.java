@@ -8,6 +8,8 @@ import com.expense.app.expense.entity.CategoryEntity;
 
 public class ExpenseReportDto {
 	
+	private Integer expenseCount;
+	
 	private BigDecimal minExpense;
 	
 	private BigDecimal maxExpense;
@@ -18,6 +20,10 @@ public class ExpenseReportDto {
 	
 	private Map<CategoryEntity, BigDecimal> expenseByCategory = new HashMap<>();
 
+	public Integer getExpenseCount() {
+		return expenseCount;
+	}
+	
 	public BigDecimal getMinExpense() {
 		return minExpense;
 	}
@@ -47,6 +53,11 @@ public class ExpenseReportDto {
 		private ExpenseReportDto report = new ExpenseReportDto();
 		
 		private Builder() {
+		}
+		
+		public Builder expenseCount(Integer expenseCount) {
+			report.expenseCount = expenseCount;
+			return this;
 		}
 		
 		public Builder minExpense(BigDecimal minExpense) {
