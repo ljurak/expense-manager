@@ -132,7 +132,22 @@
 					<button class="submit-btn" type="submit">Create new expense</button>
 				</div>
 			</form>
-			
+			<div class="expense-report" th:if="${report}">
+				<div th:if="${report.expenseCount} == 0">
+					No expenses found for given report criteria. Try again with different values.
+				</div>
+				<div th:unless="${report.expenseCount} == 0">
+					<p th:text="|Number of expenses included in report: ${report.expenseCount}|">Number of expenses</p>
+					<p th:text="|Minimal expense: ${report.minExpense}|">Minimal expense</p>
+					<p th:text="|Maximal expense: ${report.maxExpense}|">Maximal expense</p>
+					<p th:text="|Average expense: ${report.avgExpense}|">Average expense</p>
+					<p th:text="|Total sum of expenses: ${report.sumExpense}|">Total sum of expenses</p>
+					<p>Total sum of expenses by category</p>
+					<ul>
+						<li th:each="entry : ${report.expenseByCategory}" th:text="|${entry.key.name}: ${entry.value}|">Category: expense</li>
+					</ul>
+				</div>
+			</div>
 		</main>
 		<footer class="page-footer">
 			<p>Expense Manager 2019</p>
