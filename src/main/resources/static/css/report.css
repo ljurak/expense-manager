@@ -1,0 +1,17 @@
+.report-header {
+	margin: 20px 0 10px;
+	font-size: 22px;
+	font-weight: normal;
+}
+
+.report-dates {
+	font-style: italic;
+}
+
+.report-content {
+	margin-top: 20px;
+}
+
+.report-content p {
+	margin: 10px 0;
+}
