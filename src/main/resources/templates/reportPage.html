@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 	<link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
 	<link rel="stylesheet" href="../static/css/expenses.css" th:href="@{/css/expenses.css}">
+	<link rel="stylesheet" href="../static/css/report.css" th:href="@{/css/report.css}">
 </head>
 <body>
 	<div class="container">
@@ -132,11 +133,15 @@
 					<button class="submit-btn" type="submit">Create new expense</button>
 				</div>
 			</form>
-			<div class="expense-report" th:if="${report}">
-				<div th:if="${report.expenseCount} == 0">
+			<section class="expense-report" th:if="${report}">
+				<header>
+					<h2 class="report-header">Expense report</h2>
+					<div class="report-dates" th:text="|From: ${expenseReportQuery.reportStartDate}  To: ${expenseReportQuery.reportEndDate}|">From: 18-10-2019  To: 25-12-2019</div>
+				</header>
+				<div class="report-content" th:if="${report.expenseCount} == 0">
 					No expenses found for given report criteria. Try again with different values.
 				</div>
-				<div th:unless="${report.expenseCount} == 0">
+				<div class="report-content" th:unless="${report.expenseCount} == 0">
 					<p th:text="|Number of expenses included in report: ${report.expenseCount}|">Number of expenses</p>
 					<p th:text="|Minimal expense: ${report.minExpense}|">Minimal expense</p>
 					<p th:text="|Maximal expense: ${report.maxExpense}|">Maximal expense</p>
@@ -147,7 +152,7 @@
 						<li th:each="entry : ${report.expenseByCategory}" th:text="|${entry.key.name}: ${entry.value}|">Category: expense</li>
 					</ul>
 				</div>
-			</div>
+			</section>
 		</main>
 		<footer class="page-footer">
 			<p>Expense Manager 2019</p>
