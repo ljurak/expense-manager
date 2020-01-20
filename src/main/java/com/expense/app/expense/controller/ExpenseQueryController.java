@@ -50,26 +50,6 @@ public class ExpenseQueryController {
 		return categoryRepo.findAll();
 	}
 	
-	@GetMapping("/expenses")
-	public String showExpensesPage(
-			@RequestParam(required = false, defaultValue = "0") int page, 
-			Authentication authentication, 
-			Model model) {
-		
-		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-		
-		Page<ExpenseEntity> expensesPage = expenseRepo.findByUsername(
-				username, PageRequest.of(page, pageSize, Sort.by("date").descending()));
-		
-		model.addAttribute("expenseCreateCommand", new ExpenseCreateCommand());
-		model.addAttribute("expenseReportQuery", new ExpenseReportQuery());
-		model.addAttribute("expenseFilterQuery", new ExpenseFilterQuery());
-		model.addAttribute("expensesList", expensesPage.getContent());
-		model.addAttribute("pageCount", expensesPage.getTotalPages());
-		model.addAttribute("currentPage", expensesPage.getNumber());
-		return "home";
-	}
-	
 	@GetMapping("/expenses/show")
 	public String showFilteredExpensesPage(
 			@ModelAttribute("expenseFilterQuery") @Valid ExpenseFilterQuery query, 
