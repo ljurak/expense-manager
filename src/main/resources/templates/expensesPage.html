@@ -150,7 +150,7 @@
 				<div class="expenses-list-item" th:each="expense : ${expensesList}">
 					<div class="expense-date">
 						<span class="title">Date:</span>
-						<span class="value" th:text="${expense.date}">18-07-2019</span>
+						<span class="value" th:text="${#temporals.format(expense.date, 'dd-MM-yyyy')}">18-07-2019</span>
 					</div>
 					<div class="expense-value">
 						<span class="title">Value:</span>
