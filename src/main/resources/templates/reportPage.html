@@ -136,7 +136,7 @@
 			<section class="expense-report" th:if="${report}">
 				<header>
 					<h2 class="report-header">Expense report</h2>
-					<div class="report-dates" th:text="|From: ${expenseReportQuery.reportStartDate}  To: ${expenseReportQuery.reportEndDate}|">From: 18-10-2019  To: 25-12-2019</div>
+					<div class="report-dates" th:text="|From: ${#temporals.format(expenseReportQuery.reportStartDate, 'dd-MM-yyyy')} To: ${#temporals.format(expenseReportQuery.reportEndDate, 'dd-MM-yyyy')}|">From: 18-10-2019  To: 25-12-2019</div>
 				</header>
 				<div class="report-content" th:if="${report.expenseCount} == 0">
 					No expenses found for given report criteria. Try again with different values.
@@ -147,10 +147,13 @@
 					<p th:text="|Maximal expense: ${report.maxExpense}|">Maximal expense</p>
 					<p th:text="|Average expense: ${report.avgExpense}|">Average expense</p>
 					<p th:text="|Total sum of expenses: ${report.sumExpense}|">Total sum of expenses</p>
-					<p>Total sum of expenses by category</p>
-					<ul>
-						<li th:each="entry : ${report.expenseByCategory}" th:text="|${entry.key.name}: ${entry.value}|">Category: expense</li>
-					</ul>
+					<div class="report-details-title">Total sum of expenses by category</div>
+					<div class="report-details">
+						<div class="report-details-row" th:each="entry : ${report.expenseByCategory}">
+							<span class="expense-category" th:text="${entry.key.name}">Category:</span>
+							<span class="expense-value" th:text="${entry.value}">158.43</span>
+						</div>
+					</div>
 				</div>
 			</section>
 		</main>
