@@ -1,11 +1,12 @@
 .report-header {
-	margin: 20px 0 10px;
+	margin: 40px 0 10px;
 	font-size: 22px;
 	font-weight: normal;
 }
 
 .report-dates {
 	font-style: italic;
+	text-decoration: underline;
 }
 
 .report-content {
@@ -14,4 +15,22 @@
 
 .report-content p {
 	margin: 10px 0;
+}
+
+.report-details-title {
+	margin: 20px 0 10px;
+}
+
+.report-details {
+	display: flex;
+	flex-direction: column;
+	width: 50%;
+	min-width: 300px;
+}
+
+.report-details-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 5px;
 }
