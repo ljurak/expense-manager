@@ -45,7 +45,7 @@ public class ExpenseCommandController {
 		model.addAttribute("expenseReportQuery", new ExpenseReportQuery());
 		
 		if (result.hasErrors()) {
-			return "home";
+			return "expensesPage";
 		}
 		
 		if (command.getDescription().length() == 0) {
@@ -56,7 +56,7 @@ public class ExpenseCommandController {
 		command.setUsername(username);
 		
 		expenseService.createExpense(command);
-		return "redirect:/expenses";
+		return "redirect:/expenses/show";
 	}
 	
 	@GetMapping("/expenses/delete/{id}")
