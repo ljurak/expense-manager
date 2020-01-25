@@ -6,24 +6,31 @@
 
 .report-dates {
 	font-style: italic;
-	text-decoration: underline;
 }
 
 .report-content {
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 .report-content p {
-	margin: 10px 0;
+	margin: 0 0 10px;
+}
+
+.report-details,
+.report-general {
+	padding-top: 10px;
+	border-top: 1px solid #000;
 }
 
 .report-details-title {
-	margin: 20px 0 10px;
+	margin: 0 0 10px;
+	font-size: 18px;
+	font-weight: normal;
 }
 
-.report-details {
-	display: flex;
-	flex-direction: column;
+.report-details ul {
+	margin: 0;
+	padding: 0;
 	width: 50%;
 	min-width: 300px;
 }
