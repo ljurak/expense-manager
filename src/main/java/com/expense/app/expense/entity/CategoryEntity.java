@@ -25,4 +25,25 @@ public class CategoryEntity {
 	public String getName() {
 		return name;
 	}
+	
+	public static Builder builder() {
+		return new Builder();
+	}
+	
+	public static final class Builder {
+		
+		private CategoryEntity category = new CategoryEntity();
+		
+		private Builder() {
+		}
+		
+		public Builder name(String name) {
+			category.name = name;
+			return this;
+		}
+		
+		public CategoryEntity build() {
+			return category;
+		}
+	}
 }
