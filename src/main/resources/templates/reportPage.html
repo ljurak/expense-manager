@@ -142,18 +142,22 @@
 					No expenses found for given report criteria. Try again with different values.
 				</div>
 				<div class="report-content" th:unless="${report.expenseCount} == 0">
-					<p th:text="|Number of expenses included in report: ${report.expenseCount}|">Number of expenses</p>
-					<p th:text="|Minimal expense: ${report.minExpense}|">Minimal expense</p>
-					<p th:text="|Maximal expense: ${report.maxExpense}|">Maximal expense</p>
-					<p th:text="|Average expense: ${report.avgExpense}|">Average expense</p>
-					<p th:text="|Total sum of expenses: ${report.sumExpense}|">Total sum of expenses</p>
-					<div class="report-details-title">Total sum of expenses by category</div>
-					<div class="report-details">
-						<div class="report-details-row" th:each="entry : ${report.expenseByCategory}">
-							<span class="expense-category" th:text="${entry.key.name}">Category:</span>
-							<span class="expense-value" th:text="${entry.value}">158.43</span>
-						</div>
+					<div class="report-general">
+						<p th:text="|Number of expenses included in report: ${report.expenseCount}|">Number of expenses</p>
+						<p th:text="|Minimal expense: ${report.minExpense}|">Minimal expense</p>
+						<p th:text="|Maximal expense: ${report.maxExpense}|">Maximal expense</p>
+						<p th:text="|Average expense: ${report.avgExpense}|">Average expense</p>
+						<p th:text="|Total sum of expenses: ${report.sumExpense}|">Total sum of expenses</p>
 					</div>
+					<div class="report-details">
+						<h3 class="report-details-title">Total sum of expenses by category</h3>
+						<ul>
+							<li class="report-details-row" th:each="entry : ${report.expenseByCategory}">
+								<span class="expense-category" th:text="${entry.key.name}">Category:</span>
+								<span class="expense-value" th:text="${entry.value}">158.43</span>
+							</li>
+						</ul>
+					</div>					
 				</div>
 			</section>
 		</main>
