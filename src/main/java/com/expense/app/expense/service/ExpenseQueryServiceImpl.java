@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.expense.app.expense.dto.ExpenseReportDto;
 import com.expense.app.expense.dto.query.ExpenseReportQuery;
@@ -27,40 +28,29 @@ public class ExpenseQueryServiceImpl implements ExpenseQueryService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ExpenseReportDto generateReport(ExpenseReportQuery query) {
 		Specification<ExpenseEntity> specification = new ExpenseReportSpecification(query);
 		List<ExpenseEntity> expenseList = expenseRepo.findAll(specification);
-		
-		Integer expenseCount = expenseList.size();
-		
-		if (expenseCount == 0) {
+			
+		if (expenseList.isEmpty()) {
 			ExpenseReportDto report = ExpenseReportDto.builder()
 					.expenseCount(0)
 					.build();
 			return report;
 		}
 		
-		BigDecimal minExpense = expenseList.stream()
-				.map(ExpenseEntity::getValue)
-				.min(Comparator.naturalOrder())
-				.orElse(BigDecimal.ZERO);
+		Integer expenseCount = expenseList.size();	
 		
-		BigDecimal maxExpense = expenseList.stream()
-				.map(ExpenseEntity::getValue)
-				.max(Comparator.naturalOrder())
-				.orElse(BigDecimal.ZERO);
+		BigDecimal minExpense = calculateMinExpense(expenseList);
 		
-		BigDecimal sumExpense = expenseList.stream()
-				.map(ExpenseEntity::getValue)
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal maxExpense = calculateMaxExpense(expenseList);		
 		
-		BigDecimal avgExpense = sumExpense.divide(new BigDecimal(expenseCount), 2, RoundingMode.DOWN);
+		BigDecimal sumExpense = calculateSumExpense(expenseList);		
 		
-		Map<CategoryEntity, BigDecimal> expenseByCategory = expenseList.stream()
-				.collect(Collectors.toMap(
-						ExpenseEntity::getCategory, 
-						ExpenseEntity::getValue, 
-						(oldValue, newValue) -> oldValue.add(newValue)));
+		BigDecimal avgExpense = sumExpense.divide(new BigDecimal(expenseCount), 2, RoundingMode.DOWN);		
+		
+		Map<CategoryEntity, BigDecimal> expenseByCategory = calculateExpenseByCategory(expenseList);
 		
 		return ExpenseReportDto.builder()
 				.expenseCount(expenseCount)
@@ -70,5 +60,33 @@ public class ExpenseQueryServiceImpl implements ExpenseQueryService {
 				.sumExpense(sumExpense)
 				.expenseByCategory(expenseByCategory)
 				.build();
-	}	
+	}
+	
+	private BigDecimal calculateMinExpense(List<ExpenseEntity> expenseList) {
+		return expenseList.stream()
+				.map(ExpenseEntity::getValue)
+				.min(Comparator.naturalOrder())
+				.orElse(BigDecimal.ZERO);
+	}
+	
+	private BigDecimal calculateMaxExpense(List<ExpenseEntity> expenseList) {
+		return expenseList.stream()
+				.map(ExpenseEntity::getValue)
+				.max(Comparator.naturalOrder())
+				.orElse(BigDecimal.ZERO);
+	}
+	
+	private BigDecimal calculateSumExpense(List<ExpenseEntity> expenseList) {
+		return expenseList.stream()
+				.map(ExpenseEntity::getValue)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+	}
+	
+	private Map<CategoryEntity, BigDecimal> calculateExpenseByCategory(List<ExpenseEntity> expenseList) {
+		return expenseList.stream()
+				.collect(Collectors.toMap(
+						ExpenseEntity::getCategory, 
+						ExpenseEntity::getValue, 
+						(oldValue, newValue) -> oldValue.add(newValue)));
+	}
 }
