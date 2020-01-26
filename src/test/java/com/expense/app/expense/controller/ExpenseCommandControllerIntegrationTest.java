@@ -8,15 +8,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 public class ExpenseCommandControllerIntegrationTest {
 	
 	@Autowired
@@ -34,8 +33,8 @@ public class ExpenseCommandControllerIntegrationTest {
 	
 	
 	@Test
-	@WithUserDetails("ananas")
-	public void shouldFailValidationWhenMissingParameters() throws Exception {
+	@WithMockUser("admin")
+	public void shouldFailValidationWhenCreatingExpenseWithMissingParameters() throws Exception {
 		// when
 		mockMvc.perform(post("/expenses/create")
 				.param("date", "2019-12-08")
@@ -52,7 +51,8 @@ public class ExpenseCommandControllerIntegrationTest {
 	}
 	
 	@Test
-	@WithUserDetails("ananas")
+	@WithMockUser("admin")
+	@DirtiesContext
 	public void shouldCreateExpense() throws Exception {
 		// when
 		mockMvc.perform(post("/expenses/create")
@@ -66,5 +66,30 @@ public class ExpenseCommandControllerIntegrationTest {
 		.andExpect(status().is3xxRedirection())
 		.andExpect(redirectedUrl("/expenses/show"))
 		.andExpect(view().name("redirect:/expenses/show"));
+	}
+	
+	@Test
+	@WithMockUser("admin")
+	@DirtiesContext
+	public void shouldDeleteExpense() throws Exception {
+		// when
+		mockMvc.perform(get("/expenses/delete/{id}", 1)
+				.header("Referer", "http://localhost:8080/expenses/show"))
+		
+		// then
+		.andExpect(status().is3xxRedirection())
+		.andExpect(redirectedUrl("/expenses/show"))
+		.andExpect(view().name("redirect:/expenses/show"));
+	}
+	
+	@Test
+	@WithMockUser("john")
+	public void shouldReturn403WhenDeletingNotOwnExpense() throws Exception {
+		// when
+		mockMvc.perform(get("/expenses/delete/{id}", 1)
+				.header("Referer", "http://localhost:8080/expenses/show"))
+		
+		// then
+		.andExpect(status().isForbidden());
 	}
 }
