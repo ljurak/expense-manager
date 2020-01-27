@@ -22,7 +22,7 @@ public class UserCommandController {
 	@PostMapping("/register-user")
 	public String registerUser(@ModelAttribute("userCommand") @Valid UserRegisterCommand command, BindingResult result) {
 		if (result.hasErrors()) {
-			return "register-user";
+			return "registerUser";
 		}
 		userService.registerUser(command);
 		return "redirect:/login";

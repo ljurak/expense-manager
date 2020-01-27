@@ -12,6 +12,6 @@ public class UserQueryController {
 	@GetMapping("/register-user")
 	public String showRegisterForm(Model model) {
 		model.addAttribute("userCommand", new UserRegisterCommand());
-		return "register-user";
+		return "registerUser";
 	}
 }
