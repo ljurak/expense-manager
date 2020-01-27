@@ -11,11 +11,26 @@
 		</div>
 		<div class="report-content" th:unless="${report.expenseCount} == 0">
 			<div class="report-general">
-				<p th:text="|Number of expenses included in report: ${report.expenseCount}|">Number of expenses</p>
-				<p th:text="|Minimal expense: ${report.minExpense}|">Minimal expense</p>
-				<p th:text="|Maximal expense: ${report.maxExpense}|">Maximal expense</p>
-				<p th:text="|Average expense: ${report.avgExpense}|">Average expense</p>
-				<p th:text="|Total sum of expenses: ${report.sumExpense}|">Total sum of expenses</p>
+				<p>
+					<span>Number of expenses included in report</span>
+					<span th:text="${report.expenseCount}">18</span>
+				</p>
+				<p>
+					<span>Minimal expense</span>
+					<span th:text="${report.minExpense}">7.50</span>
+				</p>
+				<p>
+					<span>Maximal expense</span>
+					<span th:text="${report.maxExpense}">127.20</span>
+				</p>
+				<p>
+					<span>Average expense</span>
+					<span th:text="${report.avgExpense}">21.45</span>
+				</p>
+				<p>
+					<span>Total sum of expenses</span>
+					<span th:text="${report.sumExpense}">1565</span>
+				</p>
 			</div>
 			<div class="report-details">
 				<h3 class="report-details-title">Total sum of expenses by category</h3>

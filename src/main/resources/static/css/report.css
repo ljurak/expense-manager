@@ -13,17 +13,25 @@
 }
 
 .report-content p {
-	margin: 0 0 10px;
+	padding: 5px 0;
+	margin: 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.report-content p:nth-of-type(2n) {
+	background-color: rgba(0,0,0,.1);
 }
 
 .report-details,
 .report-general {
-	padding-top: 10px;
 	border-top: 1px solid #000;
+	padding: 5px 0;
 }
 
 .report-details-title {
-	margin: 0 0 10px;
+	margin: 5px 0;
 	font-size: 18px;
 	font-weight: normal;
 }
@@ -31,13 +39,15 @@
 .report-details ul {
 	margin: 0;
 	padding: 0;
-	width: 50%;
-	min-width: 300px;
 }
 
 .report-details-row {
+	padding: 5px 0;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 10px;
+}
+
+.report-details-row:nth-of-type(2n) {
+	background-color: rgba(0,0,0,.1);
 }
