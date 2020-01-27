@@ -135,6 +135,7 @@
 			</form>
 			<th:block th:replace="${content}" />
 		</main>
+		<div class="modal"></div>
 		<footer class="page-footer">
 			<p>Expense Manager 2019</p>
 		</footer>
@@ -153,5 +154,6 @@
 		flatpickr(reportEndDate, { maxDate: 'today' });
 		flatpickr(createDate, { maxDate: 'today' });
 	</script>
+	<script th:src="@{/js/expense.js}"></script>
 </body>
 </html>
