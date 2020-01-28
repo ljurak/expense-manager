@@ -1,17 +1,27 @@
 package com.expense.app.user.service;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.expense.app.mail.service.EmailService;
+import com.expense.app.user.dto.command.UserActivateCommand;
 import com.expense.app.user.dto.command.UserRegisterCommand;
 import com.expense.app.user.dto.command.UserUpdateCommand;
 import com.expense.app.user.entity.RoleEntity;
 import com.expense.app.user.entity.UserEntity;
+import com.expense.app.user.entity.VerificationTokenEntity;
 import com.expense.app.user.exception.RoleNotFoundException;
-import com.expense.app.user.exception.UsernameNotAvailableException;
+import com.expense.app.user.exception.UserNotAvailableException;
+import com.expense.app.user.exception.VerificationTokenException;
 import com.expense.app.user.repo.RoleRepo;
 import com.expense.app.user.repo.UserRepo;
+import com.expense.app.user.repo.VerificationTokenRepo;
 
 @Service
 @Transactional
@@ -21,22 +31,36 @@ public class UserCommandServiceImpl implements UserCommandService {
 	
 	private RoleRepo roleRepo;
 	
+	private VerificationTokenRepo tokenRepo;
+	
 	private PasswordEncoder passwordEncoder;
 	
-	public UserCommandServiceImpl(UserRepo userRepo, RoleRepo roleRepo, PasswordEncoder passwordEncoder) {
+	private EmailService emailService;
+	
+	@Value("${verificationToken.expirationTime}")
+	private long expirationTime;
+	
+	public UserCommandServiceImpl(
+			UserRepo userRepo, 
+			RoleRepo roleRepo, 
+			VerificationTokenRepo tokenRepo, 
+			PasswordEncoder passwordEncoder,
+			EmailService emailService) {
 		this.userRepo = userRepo;
 		this.roleRepo = roleRepo;
+		this.tokenRepo = tokenRepo;
 		this.passwordEncoder = passwordEncoder;
+		this.emailService = emailService;
 	}
 	
 	@Override
 	public void registerUser(UserRegisterCommand command) {
-		if (userRepo.existsByUsername(command.getUsername())) {
-			throw new UsernameNotAvailableException("Given username is not available");
+		if (userRepo.existsByUsernameOrEmail(command.getUsername(), command.getEmail())) {
+			throw new UserNotAvailableException("Given username or email is not available", command);
 		}
 		
-		RoleEntity roleUser = roleRepo.findByName("ROLE_USER").orElseThrow(
-				() -> new RoleNotFoundException("Role USER does not exist"));
+		RoleEntity roleUser = roleRepo.findByName("ROLE_USER")
+				.orElseThrow(() -> new RoleNotFoundException("Role USER does not exist"));
 		
 		UserEntity user = UserEntity.builder()
 				.username(command.getUsername())
@@ -44,11 +68,54 @@ public class UserCommandServiceImpl implements UserCommandService {
 				.firstname(command.getFirstname())
 				.lastname(command.getLastname())
 				.email(command.getEmail())
-				.enabled(true)
+				.enabled(false)
 				.role(roleUser)
 				.build();
 		
-		userRepo.save(user);		
+		userRepo.save(user);	
+		
+		VerificationTokenEntity verificationToken = VerificationTokenEntity.builder()
+				.user(user)
+				.token(UUID.randomUUID().toString())
+				.createdAt(LocalDateTime.now())
+				.build();		
+			
+		tokenRepo.save(verificationToken);
+		
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(user.getEmail());
+		mail.setFrom("noreply@example.com");
+		mail.setSubject("Activate your account!");
+		mail.setText("Thank you for registering in our service.\n"
+				+ "To activate your account click following link:\n"
+				+ "http://localhost:8080/activate-user?token=" + verificationToken.getToken());
+		emailService.sendEmail(mail);		
+	}
+	
+	@Override
+	public void activateUser(UserActivateCommand command) {
+		VerificationTokenEntity verificationToken = tokenRepo.findByToken(command.getToken())
+				.orElseThrow(() -> new VerificationTokenException("Your token is invalid. Please register again."));
+		
+		validateVerificationToken(verificationToken);
+		
+		UserEntity user = verificationToken.getUser();
+		user.setEnabled(true);
+		tokenRepo.delete(verificationToken);
+	}
+	
+	private void validateVerificationToken(VerificationTokenEntity verificationToken) {
+		LocalDateTime expirationDate = verificationToken.getCreatedAt().plusSeconds(expirationTime);
+		if (LocalDateTime.now().isAfter(expirationDate)) {
+			deleteInactiveUser(verificationToken);
+			throw new VerificationTokenException("Your token has expired. Please register again.");
+		}
+	}
+	
+	private void deleteInactiveUser(VerificationTokenEntity verificationToken) {
+		UserEntity user = verificationToken.getUser();
+		tokenRepo.delete(verificationToken);
+		userRepo.delete(user);
 	}
 
 	@Override
