@@ -9,6 +9,22 @@
 </head>
 <body>
 	<form class="register-form" action="#" th:action="@{/register-user}" th:object="${userCommand}" method="post">
+		<div class="form-group" th:if="${param.success}">
+			<div class="alert-success">
+				Thank you for registration in our service. An email with activation link has been sent
+				to your email account. Please click provided link within 24 hours to activate your account.
+			</div>
+		</div>
+		<div class="form-group" th:if="${userExists}">
+			<div class="alert-error" th:text="${userExists}">
+				Given username or email is not available
+			</div>
+		</div>
+		<div class="form-group" th:if="${verificationFailure}">
+			<div class="alert-error" th:text="${verificationFailure}">
+				Given username or email is not available
+			</div>
+		</div>
 		<div class="form-group">
 			<label for="username">Username*</label>
 			<input th:field="*{username}" type="text" required th:errorclass="error">
