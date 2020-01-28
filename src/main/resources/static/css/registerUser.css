@@ -61,3 +61,11 @@
 	color: #140ff0;
 	transition: all 0.3s;
 }
+
+.register-form .alert-error {
+	color: #f00;
+}
+
+.register-form .alert-success {
+	color: #00d000;
+}
