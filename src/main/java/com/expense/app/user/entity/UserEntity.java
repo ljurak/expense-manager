@@ -33,7 +33,7 @@ public class UserEntity {
 	@Column(nullable = false, length = 50)
 	private String lastname;
 	
-	@Column(length = 100)
+	@Column(nullable = false, unique = true, length = 100)
 	private String email;
 	
 	@Column(nullable = false)
@@ -71,8 +71,12 @@ public class UserEntity {
 		return email;
 	}
 
-	public Boolean getEnabled() {
+	public Boolean isEnabled() {
 		return enabled;
+	}
+	
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public Set<RoleEntity> getRoles() {
