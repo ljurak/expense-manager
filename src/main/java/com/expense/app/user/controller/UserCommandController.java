@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.expense.app.user.dto.command.UserActivateCommand;
+import com.expense.app.user.dto.command.UserNotVerifiedDeleteCommand;
 import com.expense.app.user.dto.command.UserRegisterCommand;
 import com.expense.app.user.exception.UserNotAvailableException;
 import com.expense.app.user.exception.VerificationTokenException;
@@ -51,6 +52,10 @@ public class UserCommandController {
 	
 	@ExceptionHandler(VerificationTokenException.class)
 	public String handleVerificationTokenException(VerificationTokenException exception, Model model) {
+		if (exception.getTokenId() != 0) {
+			userService.deleteNotVerifiedUser(new UserNotVerifiedDeleteCommand(exception.getTokenId()));
+		}
+		
 		model.addAttribute("userCommand", new UserRegisterCommand());
 		model.addAttribute("verificationFailure", exception.getMessage());
 		return "registerUser";

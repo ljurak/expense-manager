@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.expense.app.mail.service.EmailService;
 import com.expense.app.user.dto.command.UserActivateCommand;
+import com.expense.app.user.dto.command.UserNotVerifiedDeleteCommand;
 import com.expense.app.user.dto.command.UserRegisterCommand;
 import com.expense.app.user.dto.command.UserUpdateCommand;
 import com.expense.app.user.entity.RoleEntity;
@@ -55,10 +56,27 @@ public class UserCommandServiceImpl implements UserCommandService {
 	
 	@Override
 	public void registerUser(UserRegisterCommand command) {
+		validateUsernameAndEmail(command);		
+		UserEntity user = createUser(command);		
+		VerificationTokenEntity verificationToken = createVerificationToken(user);
+		
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(user.getEmail());
+		mail.setFrom("noreply@example.com");
+		mail.setSubject("Activate your account!");
+		mail.setText("Thank you for registering in our service.\n"
+				+ "To activate your account click following link:\n"
+				+ "http://localhost:8080/activate-user?token=" + verificationToken.getToken());
+		emailService.sendEmail(mail);		
+	}
+	
+	private void validateUsernameAndEmail(UserRegisterCommand command) {
 		if (userRepo.existsByUsernameOrEmail(command.getUsername(), command.getEmail())) {
 			throw new UserNotAvailableException("Given username or email is not available", command);
 		}
-		
+	}
+	
+	private UserEntity createUser(UserRegisterCommand command) {
 		RoleEntity roleUser = roleRepo.findByName("ROLE_USER")
 				.orElseThrow(() -> new RoleNotFoundException("Role USER does not exist"));
 		
@@ -72,24 +90,17 @@ public class UserCommandServiceImpl implements UserCommandService {
 				.role(roleUser)
 				.build();
 		
-		userRepo.save(user);	
-		
+		return userRepo.save(user);
+	}
+	
+	private VerificationTokenEntity createVerificationToken(UserEntity user) {
 		VerificationTokenEntity verificationToken = VerificationTokenEntity.builder()
 				.user(user)
 				.token(UUID.randomUUID().toString())
 				.createdAt(LocalDateTime.now())
 				.build();		
 			
-		tokenRepo.save(verificationToken);
-		
-		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(user.getEmail());
-		mail.setFrom("noreply@example.com");
-		mail.setSubject("Activate your account!");
-		mail.setText("Thank you for registering in our service.\n"
-				+ "To activate your account click following link:\n"
-				+ "http://localhost:8080/activate-user?token=" + verificationToken.getToken());
-		emailService.sendEmail(mail);		
+		return tokenRepo.save(verificationToken);
 	}
 	
 	@Override
@@ -107,15 +118,18 @@ public class UserCommandServiceImpl implements UserCommandService {
 	private void validateVerificationToken(VerificationTokenEntity verificationToken) {
 		LocalDateTime expirationDate = verificationToken.getCreatedAt().plusSeconds(expirationTime);
 		if (LocalDateTime.now().isAfter(expirationDate)) {
-			deleteInactiveUser(verificationToken);
-			throw new VerificationTokenException("Your token has expired. Please register again.");
+			throw new VerificationTokenException("Your token has expired. Please register again.", verificationToken.getId());
 		}
 	}
 	
-	private void deleteInactiveUser(VerificationTokenEntity verificationToken) {
-		UserEntity user = verificationToken.getUser();
-		tokenRepo.delete(verificationToken);
-		userRepo.delete(user);
+	@Override
+	public void deleteNotVerifiedUser(UserNotVerifiedDeleteCommand command) {
+		VerificationTokenEntity verificationToken = tokenRepo.findById(command.getTokenId()).orElse(null);
+		if (verificationToken != null) {
+			UserEntity user = verificationToken.getUser();
+			tokenRepo.delete(verificationToken);
+			userRepo.delete(user);
+		}		
 	}
 
 	@Override
