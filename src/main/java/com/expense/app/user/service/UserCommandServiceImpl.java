@@ -70,8 +70,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 	
 	private UserEntity createUser(UserRegisterCommand command) {
 		RoleEntity roleUser = roleRepo.findByName("ROLE_USER")
-				.orElseThrow(() -> new RoleNotFoundException("Role USER does not exist"));
-		
+				.orElseThrow(() -> new RoleNotFoundException("Role USER does not exist"));		
 		UserEntity user = UserEntity.builder()
 				.username(command.getUsername())
 				.password("{bcrypt}" + passwordEncoder.encode(command.getPassword()))
@@ -80,8 +79,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 				.email(command.getEmail())
 				.enabled(false)
 				.role(roleUser)
-				.build();
-		
+				.build();		
 		return userRepo.save(user);
 	}
 	
@@ -90,18 +88,15 @@ public class UserCommandServiceImpl implements UserCommandService {
 				.user(user)
 				.token(UUID.randomUUID().toString())
 				.createdAt(LocalDateTime.now())
-				.build();		
-			
+				.build();					
 		return tokenRepo.save(verificationToken);
 	}
 	
 	@Override
 	public void activateUser(UserActivateCommand command) {
 		VerificationTokenEntity verificationToken = tokenRepo.findByToken(command.getToken())
-				.orElseThrow(() -> new VerificationTokenException("Your token is invalid. Please register again."));
-		
-		validateVerificationToken(verificationToken);
-		
+				.orElseThrow(() -> new VerificationTokenException("Your token is invalid. Please register again."));		
+		validateVerificationToken(verificationToken);		
 		UserEntity user = verificationToken.getUser();
 		user.setEnabled(true);
 		tokenRepo.delete(verificationToken);
@@ -126,7 +121,6 @@ public class UserCommandServiceImpl implements UserCommandService {
 
 	@Override
 	public void updateUser(UserUpdateCommand command) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
 }
