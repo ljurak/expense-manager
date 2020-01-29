@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout (~{::body})}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout (~{::body}, ~{::link}, ~{::script})}">
+<head>
+	<link rel="stylesheet" href="../static/css/expenses.css" th:href="@{/css/expenses.css}">
+	<script src="../static/js/expense.js" th:src="@{/js/expense.js}"></script>
+</head>
 <body>
 	<div class="expenses-list">
 		<ul class="pagination-control" th:if="${pageCount > 1}" th:with="query=${expenseFilterQuery}">

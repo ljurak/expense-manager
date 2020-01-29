@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::body})}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout (~{::body}, ~{::link}, ~{::script})}">
+<head>
+	<link rel="stylesheet" href="../static/css/report.css" th:href="@{/css/report.css}">
+	<script></script>
+</head>
 <body>		
 	<section class="expense-report" th:if="${report}">
 		<header>
