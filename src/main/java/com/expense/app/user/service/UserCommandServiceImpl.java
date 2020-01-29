@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.expense.app.mail.service.EmailFactory;
 import com.expense.app.mail.service.EmailService;
 import com.expense.app.user.dto.command.UserActivateCommand;
 import com.expense.app.user.dto.command.UserNotVerifiedDeleteCommand;
@@ -59,15 +59,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 		validateUsernameAndEmail(command);		
 		UserEntity user = createUser(command);		
 		VerificationTokenEntity verificationToken = createVerificationToken(user);
-		
-		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(user.getEmail());
-		mail.setFrom("noreply@example.com");
-		mail.setSubject("Activate your account!");
-		mail.setText("Thank you for registering in our service.\n"
-				+ "To activate your account click following link:\n"
-				+ "http://localhost:8080/activate-user?token=" + verificationToken.getToken());
-		emailService.sendEmail(mail);		
+		emailService.sendEmail(EmailFactory.createVerificationEmail(user.getEmail(), verificationToken.getToken()));		
 	}
 	
 	private void validateUsernameAndEmail(UserRegisterCommand command) {
