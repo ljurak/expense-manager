@@ -9,6 +9,7 @@
 		<header>
 			<h2 class="report-header">Expense report</h2>
 			<div class="report-dates" th:text="|From: ${#temporals.format(expenseReportQuery.reportStartDate, 'dd-MM-yyyy')} To: ${#temporals.format(expenseReportQuery.reportEndDate, 'dd-MM-yyyy')}|">From: 18-10-2019  To: 25-12-2019</div>
+			<a class="report-print" th:unless="${report.expenseCount} == 0" href="#" th:href="@{/expenses/report/print(reportStartDate=${expenseReportQuery.reportStartDate},reportEndDate=${expenseReportQuery.reportEndDate},reportCategoryId=${expenseReportQuery.reportCategoryId})}">Print as PDF</a>
 		</header>
 		<div class="report-content" th:if="${report.expenseCount} == 0">
 			No expenses found for given report criteria. Try again with different values.
@@ -44,7 +45,7 @@
 						<span class="expense-value" th:text="${entry.value}">158.43</span>
 					</li>
 				</ul>
-			</div>					
+			</div>								
 		</div>
 	</section>
 </body>
