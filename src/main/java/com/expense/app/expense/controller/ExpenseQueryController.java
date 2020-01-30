@@ -7,6 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -25,6 +29,7 @@ import com.expense.app.expense.entity.ExpenseEntity;
 import com.expense.app.expense.repo.CategoryRepo;
 import com.expense.app.expense.repo.ExpenseRepo;
 import com.expense.app.expense.service.ExpenseQueryService;
+import com.expense.app.expense.service.ExpenseReportCreator;
 import com.expense.app.expense.repo.ExpenseFilterSpecification;
 
 @Controller
@@ -36,13 +41,20 @@ public class ExpenseQueryController {
 	
 	private ExpenseQueryService expenseService;
 	
+	private ExpenseReportCreator reportCreator;
+	
 	@Value("${expenses.pageSize}")
 	private int pageSize;
 	
-	public ExpenseQueryController(ExpenseRepo expenseRepo, CategoryRepo categoryRepo, ExpenseQueryService expenseService) {
+	public ExpenseQueryController(
+			ExpenseRepo expenseRepo, 
+			CategoryRepo categoryRepo, 
+			ExpenseQueryService expenseService,
+			ExpenseReportCreator reportCreator) {
 		this.expenseRepo = expenseRepo;
 		this.categoryRepo = categoryRepo;
 		this.expenseService = expenseService;
+		this.reportCreator = reportCreator;
 	}
 	
 	@ModelAttribute("expenseCategories")
@@ -84,7 +96,7 @@ public class ExpenseQueryController {
 			@ModelAttribute("expenseReportQuery") @Valid ExpenseReportQuery query,
 			BindingResult result,
 			Authentication authentication,
-			Model model) {
+			Model model) throws Exception {
 		
 		model.addAttribute("expenseCreateCommand", new ExpenseCreateCommand());
 		model.addAttribute("expenseFilterQuery", new ExpenseFilterQuery());
@@ -100,5 +112,31 @@ public class ExpenseQueryController {
 		model.addAttribute("report", report);
 		
 		return "reportPage";
+	}
+	
+	@GetMapping("/expenses/report/print")
+	public ResponseEntity<?> printPdfReport(
+			@ModelAttribute("expenseReportQuery") @Valid ExpenseReportQuery query,
+			BindingResult result,
+			Authentication authentication) {
+		
+		if (result.hasErrors()) {
+			return ResponseEntity.badRequest().build();
+		}
+		
+		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+		query.setUsername(username);
+		
+		ExpenseReportDto report = expenseService.generateReport(query);
+		
+		try {
+			byte[] pdfReport = reportCreator.generatePdfReport(report);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_PDF);
+			headers.set("Content-Disposition", "attachment; filename=report.pdf");
+			return new ResponseEntity<>(pdfReport, headers, HttpStatus.OK);
+		} catch (Exception ex) {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 }
