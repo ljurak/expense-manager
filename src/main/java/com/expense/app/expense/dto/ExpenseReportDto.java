@@ -1,12 +1,18 @@
 package com.expense.app.expense.dto;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 import com.expense.app.expense.entity.CategoryEntity;
+import com.expense.app.expense.entity.ExpenseEntity;
 
 public class ExpenseReportDto {
+	
+	private LocalDate startDate;
+	
+	private LocalDate endDate;
 	
 	private Integer expenseCount;
 	
@@ -18,7 +24,17 @@ public class ExpenseReportDto {
 	
 	private BigDecimal sumExpense;
 	
-	private Map<CategoryEntity, BigDecimal> expenseByCategory = new HashMap<>();
+	private List<ExpenseEntity> expenseList;
+	
+	private Map<CategoryEntity, BigDecimal> expenseByCategory;
+	
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+
+	public LocalDate getEndDate() {
+		return endDate;
+	}
 
 	public Integer getExpenseCount() {
 		return expenseCount;
@@ -39,6 +55,10 @@ public class ExpenseReportDto {
 	public BigDecimal getSumExpense() {
 		return sumExpense;
 	}
+	
+	public List<ExpenseEntity> getExpenseList() {
+		return expenseList;
+	}
 
 	public Map<CategoryEntity, BigDecimal> getExpenseByCategory() {
 		return expenseByCategory;
@@ -53,6 +73,16 @@ public class ExpenseReportDto {
 		private ExpenseReportDto report = new ExpenseReportDto();
 		
 		private Builder() {
+		}
+		
+		public Builder startDate(LocalDate startDate) {
+			report.startDate = startDate;
+			return this;
+		}
+		
+		public Builder endDate(LocalDate endDate) {
+			report.endDate = endDate;
+			return this;
 		}
 		
 		public Builder expenseCount(Integer expenseCount) {
@@ -77,6 +107,11 @@ public class ExpenseReportDto {
 		
 		public Builder sumExpense(BigDecimal sumExpense) {
 			report.sumExpense = sumExpense;
+			return this;
+		}
+		
+		public Builder expenseList(List<ExpenseEntity> expenseList) {
+			report.expenseList = expenseList;
 			return this;
 		}
 		
