@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,7 @@ public class ExpenseQueryServiceImpl implements ExpenseQueryService {
 	@Transactional(readOnly = true)
 	public ExpenseReportDto generateReport(ExpenseReportQuery query) {
 		Specification<ExpenseEntity> specification = new ExpenseReportSpecification(query);
-		List<ExpenseEntity> expenseList = expenseRepo.findAll(specification);
+		List<ExpenseEntity> expenseList = expenseRepo.findAll(specification, Sort.by("date").ascending());
 			
 		if (expenseList.isEmpty()) {
 			ExpenseReportDto report = ExpenseReportDto.builder()
@@ -53,11 +54,14 @@ public class ExpenseQueryServiceImpl implements ExpenseQueryService {
 		Map<CategoryEntity, BigDecimal> expenseByCategory = calculateExpenseByCategory(expenseList);
 		
 		return ExpenseReportDto.builder()
+				.startDate(query.getReportStartDate())
+				.endDate(query.getReportEndDate())
 				.expenseCount(expenseCount)
 				.minExpense(minExpense)
 				.maxExpense(maxExpense)
 				.avgExpense(avgExpense)
 				.sumExpense(sumExpense)
+				.expenseList(expenseList)
 				.expenseByCategory(expenseByCategory)
 				.build();
 	}
