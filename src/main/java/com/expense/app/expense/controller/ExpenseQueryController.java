@@ -1,5 +1,7 @@
 package com.expense.app.expense.controller;
 
+import java.time.LocalDate;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -101,6 +103,7 @@ public class ExpenseQueryController {
 		model.addAttribute("expenseCreateCommand", new ExpenseCreateCommand());
 		model.addAttribute("expenseFilterQuery", new ExpenseFilterQuery());
 		
+		validateStartAndEndDate(query.getReportStartDate(), query.getReportEndDate(), result);
 		if (result.hasErrors()) {
 			return "reportPage";
 		}
@@ -115,11 +118,12 @@ public class ExpenseQueryController {
 	}
 	
 	@GetMapping("/expenses/report/print")
-	public ResponseEntity<?> printPdfReport(
+	public ResponseEntity<byte[]> printPdfReport(
 			@ModelAttribute("expenseReportQuery") @Valid ExpenseReportQuery query,
 			BindingResult result,
 			Authentication authentication) {
 		
+		validateStartAndEndDate(query.getReportStartDate(), query.getReportEndDate(), result);
 		if (result.hasErrors()) {
 			return ResponseEntity.badRequest().build();
 		}
@@ -137,6 +141,14 @@ public class ExpenseQueryController {
 			return new ResponseEntity<>(pdfReport, headers, HttpStatus.OK);
 		} catch (Exception ex) {
 			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	private void validateStartAndEndDate(LocalDate startDate, LocalDate endDate, BindingResult result) {		
+		if (startDate != null && endDate != null) {
+			if (startDate.isAfter(endDate)) {
+				result.rejectValue("reportEndDate", "expenseReportQuery.date.mismatch");
+			}
 		}
 	}
 }

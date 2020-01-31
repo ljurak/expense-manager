@@ -67,14 +67,14 @@
 			<form class="report-form" action="#" th:action="@{/expenses/report}" th:object="${expenseReportQuery}" method="get">
 				<div class="form-group">
 					<label for="reportStartDate">From*</label>
-					<input th:field="*{reportStartDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
+					<input th:field="*{reportStartDate}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error" autocomplete="off">
 					<div class="error" th:if="${#fields.hasErrors('reportStartDate')}">
 						<p th:each="err : ${#fields.errors('reportStartDate')}" th:text="${err}">Error message</p>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="reportEndDate">To*</label>
-					<input th:field="*{reportEndDate}" type="text" placeholder="YYYY-MM-DD" th:errorclass="error" autocomplete="off">
+					<input th:field="*{reportEndDate}" type="text" placeholder="YYYY-MM-DD" required th:errorclass="error" autocomplete="off">
 					<div class="error" th:if="${#fields.hasErrors('reportEndDate')}">
 						<p th:each="err : ${#fields.errors('reportEndDate')}" th:text="${err}">Error message</p>
 					</div>
