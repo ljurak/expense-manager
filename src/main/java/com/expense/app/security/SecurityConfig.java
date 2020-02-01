@@ -19,6 +19,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
+	@Autowired
+	private AuthenticationFailureHandler authenticationFailureHandler;
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -33,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/login")
 				.loginProcessingUrl("/perform-login")
 				.defaultSuccessUrl("/expenses/show")
+				.failureHandler(authenticationFailureHandler)
 		.and()
 			.logout()
 				.logoutUrl("/perform-logout")
