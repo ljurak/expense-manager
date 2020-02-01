@@ -8,49 +8,49 @@
 	<div class="expenses-list">
 		<ul class="pagination-control" th:if="${pageCount > 1}" th:with="query=${expenseFilterQuery}">
 			<li class="pagination-control-item">
-				<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=0)}"> &lt;&lt; First page</a>
+				<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=0)}" th:text="#{expensesPage.pagination.first}">&lt;&lt; First page</a>
 			</li>
 			<li class="pagination-control-item">
-				<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${currentPage - 1})}">&lt; Previous page</a>
+				<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${currentPage - 1})}" th:text="#{expensesPage.pagination.previous}">&lt; Previous page</a>
 			</li>
 			<li class="pagination-control-item">
-				<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${currentPage + 1})}">Next page &gt;</a>
+				<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${currentPage + 1})}" th:text="#{expensesPage.pagination.next}">Next page &gt;</a>
 			</li>
 			<li class="pagination-control-item">
-				<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${pageCount - 1})}">Last page  &gt;&gt;</a>
+				<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${pageCount - 1})}" th:text="#{expensesPage.pagination.last}">Last page &gt;&gt;</a>
 			</li>				
 		</ul>
 		<div class="expenses-list-item" th:each="expense : ${expensesList}">
 			<div class="expense-date">
-				<span class="title">Date:</span>
+				<span class="title" th:text="#{expensesPage.list.date}">Date:</span>
 				<span class="value" th:text="${#temporals.format(expense.date, 'dd-MM-yyyy')}">18-07-2019</span>
 			</div>
 			<div class="expense-value">
-				<span class="title">Value:</span>
+				<span class="title" th:text="#{expensesPage.list.value}">Value:</span>
 				<span class="value" th:text="${expense.value}">345.21$</span>
 			</div>
 			<div class="expense-category">
-				<span class="title">Category:</span>
+				<span class="title" th:text="#{expensesPage.list.category}">Category:</span>
 				<span class="value" th:text="${expense.category.name}">sport</span>
 			</div>
 			<div class="expense-description" th:if="${expense.description != null}">
-				<span class="title">Description:</span>
+				<span class="title" th:text="#{expensesPage.list.description}">Description:</span>
 				<span class="value" th:text="${expense.description}">Definitely too much money!</span>
 			</div>
-			<a class="remove-btn" href="#" th:href="@{|/expenses/delete/${expense.id}|}">Remove</a>
+			<a class="remove-btn" href="#" th:href="@{|/expenses/delete/${expense.id}|}" th:text="#{expensesPage.list.remove}">Remove</a>
 		</div>
 		<ul class="pagination-control" th:if="${pageCount > 1 && !#lists.isEmpty(expensesList)}" th:with="query=${expenseFilterQuery}">
 			<li class="pagination-control-item">
-				<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=0)}"> &lt;&lt; First page</a>
+				<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=0)}" th:text="#{expensesPage.pagination.first}"> &lt;&lt; First page</a>
 			</li>
 			<li class="pagination-control-item">
-				<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${currentPage - 1})}">&lt; Previous page</a>
+				<a href="#" th:if="${currentPage > 0}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${currentPage - 1})}" th:text="#{expensesPage.pagination.previous}">&lt; Previous page</a>
 			</li>
 			<li class="pagination-control-item">
-				<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${currentPage + 1})}">Next page &gt;</a>
+				<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${currentPage + 1})}" th:text="#{expensesPage.pagination.next}">Next page &gt;</a>
 			</li>
 			<li class="pagination-control-item">
-				<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${pageCount - 1})}">Last page  &gt;&gt;</a>
+				<a href="#" th:if="${currentPage < pageCount - 1}" th:href="@{/expenses/show(searchStartDate=${query.searchStartDate},searchEndDate=${query.searchEndDate},searchCategoryId=${query.searchCategoryId},minValue=${query.minValue},maxValue=${query.maxValue},page=${pageCount - 1})}" th:text="#{expensesPage.pagination.last}">Last page &gt;&gt;</a>
 			</li>		
 		</ul>
 	</div>

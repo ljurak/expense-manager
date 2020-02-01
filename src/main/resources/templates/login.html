@@ -10,38 +10,39 @@
 <body>
 	<form class="login-form" action="#" th:action="@{/perform-login}" method="post">
 		<div class="form-group" th:if="${param.logout}">
-			<div class="alert-success">
+			<div class="alert-success" th:text="#{login.loginForm.alert.logout}">
 				You have been logged out.
 			</div>
 		</div>
 		<div class="form-group" th:if="${param.active}">
-			<div class="alert-success">
+			<div class="alert-success" th:text="#{login.loginForm.alert.active}">
 				Your account has been activated.
 			</div>
 		</div>
 		<div class="form-group" th:if="${param.error}">
-			<div class="alert-error">
+			<div class="alert-error" th:text="#{login.loginForm.alert.error}">
 				Invalid username or password.
 			</div>
 		</div>
 		<div class="form-group" th:if="${param.disabled}">
-			<div class="alert-error">
+			<div class="alert-error" th:text="#{login.loginForm.alert.disabled}">
 				Account is not active.
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="username">Username*</label>
+			<label for="username" th:text="#{login.loginForm.username.label}">Username*</label>
 			<input id="username" name="username" type="text" required>
 		</div>
 		<div class="form-group">
-			<label for="password">Password*</label>
+			<label for="password" th:text="#{login.loginForm.password.label}">Password*</label>
 			<input id="password" name="password" type="password" required>
 		</div>
 		<div class="form-group">
-			<button class="submit-btn" type="submit">Log in</button>
+			<button class="submit-btn" type="submit" th:text="#{login.loginForm.submit.label}">Log in</button>
 		</div>
 		<div class="register-link">
-			Need account? <a href="#" th:href="@{/register-user}">Register here!</a>
+			<span th:text="#{login.loginForm.registerPrompt}">Need account?</span>
+			<a href="#" th:href="@{/register-user}" th:text="#{login.loginForm.registerLink}">Register here!</a>
 		</div>
 	</form>
 </body>

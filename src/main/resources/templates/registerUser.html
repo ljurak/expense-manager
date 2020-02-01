@@ -10,61 +10,62 @@
 <body>
 	<form class="register-form" action="#" th:action="@{/register-user}" th:object="${userCommand}" method="post">
 		<div class="form-group" th:if="${param.success}">
-			<div class="alert-success">
+			<div class="alert-success" th:text="#{registerUser.registerForm.alert.completed}">
 				Thank you for registration in our service. An email with activation link has been sent
 				to your email account. Please click provided link within 24 hours to activate your account.
 			</div>
 		</div>
 		<div class="form-group" th:if="${userExists}">
 			<div class="alert-error" th:text="${userExists}">
-				Given username or email is not available
+				Given username or email is not available.
 			</div>
 		</div>
 		<div class="form-group" th:if="${verificationFailure}">
 			<div class="alert-error" th:text="${verificationFailure}">
-				Given username or email is not available
+				Your token is invalid. Please register again.
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="username">Username*</label>
+			<label for="username" th:text="#{registerUser.registerForm.username.label}">Username*</label>
 			<input th:field="*{username}" type="text" required th:errorclass="error">
 			<div class="error" th:if="${#fields.hasErrors('username')}">
 				<p th:each="err : ${#fields.errors('username')}" th:text="${err}">Error message</p>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="password">Password*</label>
+			<label for="password" th:text="#{registerUser.registerForm.password.label}">Password*</label>
 			<input th:field="*{password}" type="password" required th:errorclass="error">
 			<div class="error" th:if="${#fields.hasErrors('password')}">
 				<p th:each="err : ${#fields.errors('password')}" th:text="${err}">Error message</p>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="firstname">First name*</label>
+			<label for="firstname" th:text="#{registerUser.registerForm.firstname.label}">First name*</label>
 			<input th:field="*{firstname}" type="text" required th:errorclass="error">
 			<div class="error" th:if="${#fields.hasErrors('firstname')}">
 				<p th:each="err : ${#fields.errors('firstname')}" th:text="${err}">Error message</p>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="lastname">Last name*</label>
+			<label for="lastname" th:text="#{registerUser.registerForm.lastname.label}">Last name*</label>
 			<input th:field="*{lastname}" type="text" required th:errorclass="error">
 			<div class="error" th:if="${#fields.hasErrors('lastname')}">
 				<p th:each="err : ${#fields.errors('lastname')}" th:text="${err}">Error message</p>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="email">Email*</label>
+			<label for="email" th:text="#{registerUser.registerForm.email.label}">Email*</label>
 			<input th:field="*{email}" type="email" required th:errorclass="error">
 			<div class="error" th:if="${#fields.hasErrors('email')}">
 				<p th:each="err : ${#fields.errors('email')}" th:text="${err}">Error message</p>
 			</div>
 		</div>
 		<div class="form-group">
-			<button class="submit-btn" type="submit">Register</button>
+			<button class="submit-btn" type="submit" th:text="#{registerUser.registerForm.submit.label}">Register</button>
 		</div>
 		<div class="login-link">
-			Already have account? <a href="#" th:href="@{/login}">Log in here!</a>
+			<span th:text="#{registerUser.registerForm.registerPrompt}">Already have account?</span>
+			<a href="#" th:href="@{/login}" th:text="#{registerUser.registerForm.registerLink}">Log in here!</a>
 		</div>
 	</form>
 </body>
