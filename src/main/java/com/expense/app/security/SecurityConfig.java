@@ -27,10 +27,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.authorizeRequests()
 				.antMatchers("/css/**", "/img/**", "/js/**").permitAll()
-				.antMatchers("/login").anonymous()
-				.antMatchers("/register-user").anonymous()
-				.antMatchers("/activate-user").anonymous()
-				.anyRequest().authenticated()
+				.antMatchers(
+						"/login",
+						"/register-user",
+						"/activate-user",
+						"/reset-password",
+						"/change-password").anonymous()
+				.anyRequest().hasRole("USER")
 		.and()
 			.formLogin()
 				.loginPage("/login")
