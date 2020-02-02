@@ -11,10 +11,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.expense.app.user.dto.command.ResetPasswordTokenDeleteCommand;
 import com.expense.app.user.dto.command.UserActivateCommand;
+import com.expense.app.user.dto.command.UserChangePasswordCommand;
 import com.expense.app.user.dto.command.UserNotVerifiedDeleteCommand;
 import com.expense.app.user.dto.command.UserRegisterCommand;
+import com.expense.app.user.dto.command.UserResetPasswordCommand;
+import com.expense.app.user.exception.ResetPasswordTokenException;
 import com.expense.app.user.exception.UserNotAvailableException;
+import com.expense.app.user.exception.UserNotFoundException;
 import com.expense.app.user.exception.VerificationTokenException;
 import com.expense.app.user.service.UserCommandService;
 
@@ -43,6 +48,33 @@ public class UserCommandController {
 		return "redirect:/login?active";
 	}
 	
+	@PostMapping("/reset-password")
+	public String resetPassword(@ModelAttribute("resetCommand") @Valid UserResetPasswordCommand command, BindingResult result) {
+		if (result.hasErrors()) {
+			return "resetPassword";
+		}
+		userService.resetPassword(command);
+		return "redirect:/reset-password?success";
+	}
+	
+	@PostMapping("/change-password")
+	public String changePassword(@ModelAttribute("changePasswordCommand") @Valid UserChangePasswordCommand command, BindingResult result) {
+		validateChangePassword(command, result);
+		if (result.hasErrors()) {
+			return "changePassword";
+		}
+		userService.changePassword(command);
+		return "redirect:/login?changed";
+	}
+	
+	private void validateChangePassword(UserChangePasswordCommand command, BindingResult result) {
+		if (command.getPassword() != null && command.getConfirmPassword() != null) {
+			if (!command.getPassword().equals(command.getConfirmPassword())) {
+				result.rejectValue("confirmPassword", "changePasswordCommand.confirmPassword.mismatch");
+			}
+		}
+	}
+	
 	@ExceptionHandler(UserNotAvailableException.class)
 	public String handleUserNotAvailableException(UserNotAvailableException exception, Model model) {
 		model.addAttribute("userCommand",exception.getCommand());
@@ -57,7 +89,20 @@ public class UserCommandController {
 		}
 		
 		model.addAttribute("userCommand", new UserRegisterCommand());
-		model.addAttribute("verificationFailure", exception.getMessage());
+		model.addAttribute("verificationError", exception.getMessage());
 		return "registerUser";
+	}
+	
+	@ExceptionHandler(UserNotFoundException.class)
+	public String handleUserNotFoundException(UserNotFoundException exception) {		
+		return "redirect:/reset-password?success";
+	}
+	
+	@ExceptionHandler(ResetPasswordTokenException.class)
+	public String handleResetPasswordTokenException(ResetPasswordTokenException exception) {
+		if (exception.getTokenId() != 0) {
+			userService.deleteResetToken(new ResetPasswordTokenDeleteCommand(exception.getTokenId()));
+		}
+		return "redirect:/reset-password?error";
 	}
 }
