@@ -15,5 +15,7 @@ public interface UserRepo extends CrudRepository<UserEntity, Long> {
 	@Query("select u from UserEntity u join fetch u.roles where u.username = :username")
 	Optional<UserEntity> findByUsername(@Param("username") String username);
 	
+	Optional<UserEntity> findByEmail(String email);
+	
 	boolean existsByUsernameOrEmail(String username, String email);
 }
