@@ -10,7 +10,9 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 
 import com.expense.app.expense.dto.ExpenseReportDto;
 import com.expense.app.expense.dto.query.ExpenseReportQuery;
@@ -47,7 +49,6 @@ public class ExpenseQueryServiceImplTest {
 		assertNull(report.getMaxExpense());
 		assertNull(report.getAvgExpense());
 		assertNull(report.getSumExpense());
-		assertEquals(0, report.getExpenseByCategory().size());
 	}
 	
 	@Test
@@ -93,7 +94,7 @@ public class ExpenseQueryServiceImplTest {
 	
 	private void prepareEmptyDataSet() {				
 		List<ExpenseEntity> expenseList = new ArrayList<>();		
-		when(expenseRepo.findAll(any())).thenReturn(expenseList);
+		when(expenseRepo.findAll(any(), ArgumentMatchers.<Sort>any())).thenReturn(expenseList);
 	}
 	
 	private void prepareDataSetWithSingleCategory() {
@@ -105,7 +106,7 @@ public class ExpenseQueryServiceImplTest {
 		expenseList.add(ExpenseEntity.builder().value(new BigDecimal("23.49")).category(category1).build());
 		expenseList.add(ExpenseEntity.builder().value(new BigDecimal("28.00")).category(category1).build());
 		
-		when(expenseRepo.findAll(any())).thenReturn(expenseList);
+		when(expenseRepo.findAll(any(), ArgumentMatchers.<Sort>any())).thenReturn(expenseList);
 	}
 	
 	private void prepareDataSetWithMultipleCategories() {
@@ -128,6 +129,6 @@ public class ExpenseQueryServiceImplTest {
 		expenseList.add(ExpenseEntity.builder().value(new BigDecimal("17.50")).category(category4).build());
 		expenseList.add(ExpenseEntity.builder().value(new BigDecimal("31.00")).category(category4).build());
 		
-		when(expenseRepo.findAll(any())).thenReturn(expenseList);
+		when(expenseRepo.findAll(any(), ArgumentMatchers.<Sort>any())).thenReturn(expenseList);
 	}
 }
