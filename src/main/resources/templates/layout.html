@@ -11,12 +11,14 @@
 <body>
 	<div class="container">
 		<header class="page-header">
-			<div class="user-info" sec:authorize="isAuthenticated()">
-				Logged in as: <span sec:authentication="principal.username">User</span>
+			<div class="wrapper">
+				<div class="user-info" sec:authorize="isAuthenticated()">
+					Logged in as: <span sec:authentication="principal.username">User</span>
+				</div>
+				<form class="logout-form" action="#" th:action="@{/perform-logout}" method="post">
+					<button class="submit-btn" type="submit">Log out</button>
+				</form>
 			</div>
-			<form class="logout-form" action="#" th:action="@{/perform-logout}" method="post">
-				<button class="submit-btn" type="submit">Log out</button>
-			</form>
 		</header>
 		<aside class="sidebar">
 			<h2 class="search-form-header">Search filters</h2>

@@ -10,6 +10,8 @@
 	margin-bottom: 10px;
 	position: relative;
 	border: 1px solid #555;
+	border-radius: 4px;
+	box-shadow: 0 0 2px rgba(0,0,0,.3);
 }
 
 .expenses-list .expense-date,
@@ -42,6 +44,7 @@
 	text-decoration: none;
 	padding: 5px 20px;
 	border: 2px solid #000;
+	border-radius: 4px;
 	transition: all 0.3s;
 }
 
@@ -87,6 +90,7 @@
 	padding: 10px 50px 20px;
 	background-color: #fff;
 	border: 2px solid #000;
+	border-radius: 4px;
 	text-align: center;
 }
 
@@ -97,6 +101,7 @@
 	text-decoration: none;
 	padding: 5px 20px;
 	border: 2px solid #000;
+	border-radius: 4px;
 	transition: all 0.3s;
 }
 
@@ -114,6 +119,7 @@
 	background-color: #f00;
 	color: #fff;
 	border: none;
+	border-radius: 4px;
 	font-size: 14px;
 	display: flex;
 	justify-content: center;

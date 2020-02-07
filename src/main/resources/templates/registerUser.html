@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>Login</title>
+	<title>Expense Manager</title>
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=latin-ext" rel="stylesheet">
 	<link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
 	<link rel="stylesheet" href="../static/css/registerUser.css" th:href="@{/css/registerUser.css}">
@@ -20,8 +20,8 @@
 				Given username or email is not available.
 			</div>
 		</div>
-		<div class="form-group" th:if="${verificationFailure}">
-			<div class="alert-error" th:text="${verificationFailure}">
+		<div class="form-group" th:if="${verificationError}">
+			<div class="alert-error" th:text="${verificationError}">
 				Your token is invalid. Please register again.
 			</div>
 		</div>
@@ -64,8 +64,8 @@
 			<button class="submit-btn" type="submit" th:text="#{registerUser.registerForm.submit.label}">Register</button>
 		</div>
 		<div class="login-link">
-			<span th:text="#{registerUser.registerForm.registerPrompt}">Already have account?</span>
-			<a href="#" th:href="@{/login}" th:text="#{registerUser.registerForm.registerLink}">Log in here!</a>
+			<span th:text="#{registerUser.registerForm.loginPrompt}">Already have account?</span>
+			<a href="#" th:href="@{/login}" th:text="#{registerUser.registerForm.loginLink}">Log in here!</a>
 		</div>
 	</form>
 </body>
