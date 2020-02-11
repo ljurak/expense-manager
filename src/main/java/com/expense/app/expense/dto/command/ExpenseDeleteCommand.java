@@ -1,6 +1,8 @@
 package com.expense.app.expense.dto.command;
 
-public class ExpenseDeleteCommand {
+import com.expense.app.common.cqrs.command.Command;
+
+public class ExpenseDeleteCommand implements Command {
 	
 	private long id;
 	

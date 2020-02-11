@@ -1,6 +1,8 @@
 package com.expense.app.user.dto.command;
 
-public class UserNotVerifiedDeleteCommand {
+import com.expense.app.common.cqrs.command.Command;
+
+public class UserNotVerifiedDeleteCommand implements Command {
 	
 	private long tokenId;
 

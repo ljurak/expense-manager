@@ -1,6 +1,8 @@
 package com.expense.app.user.dto.command;
 
-public class ResetPasswordTokenDeleteCommand {
+import com.expense.app.common.cqrs.command.Command;
+
+public class ResetPasswordTokenDeleteCommand implements Command {
 	
 	private long tokenId;
 	

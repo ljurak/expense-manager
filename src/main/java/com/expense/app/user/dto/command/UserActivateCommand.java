@@ -1,6 +1,8 @@
 package com.expense.app.user.dto.command;
 
-public class UserActivateCommand {
+import com.expense.app.common.cqrs.command.Command;
+
+public class UserActivateCommand implements Command {
 	
 	private String token;
 	

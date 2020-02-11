@@ -4,7 +4,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class UserResetPasswordCommand {
+import com.expense.app.common.cqrs.command.Command;
+
+public class UserResetPasswordCommand implements Command {
 	
 	@NotBlank(message = "{validation.required}")
 	@Size(min = 5, max = 100, message = "{validation.size}")

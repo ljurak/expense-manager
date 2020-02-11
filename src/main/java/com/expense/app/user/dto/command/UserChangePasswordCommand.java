@@ -3,7 +3,9 @@ package com.expense.app.user.dto.command;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class UserChangePasswordCommand {
+import com.expense.app.common.cqrs.command.Command;
+
+public class UserChangePasswordCommand implements Command {
 	
 	@NotBlank(message = "{validation.required}")
 	@Size(min = 5, max = 50, message = "{validation.size}")

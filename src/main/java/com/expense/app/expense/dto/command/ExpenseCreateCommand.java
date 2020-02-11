@@ -10,7 +10,9 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class ExpenseCreateCommand {
+import com.expense.app.common.cqrs.command.Command;
+
+public class ExpenseCreateCommand implements Command {
 	
 	@NotNull(message = "{validation.required}")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
