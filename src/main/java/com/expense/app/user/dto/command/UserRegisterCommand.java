@@ -26,6 +26,8 @@ public class UserRegisterCommand {
 	@Size(min = 5, max = 100, message = "{validation.size}")
 	@Email(message = "{validation.email}")
 	private String email;
+	
+	private String verifyUrl;
 
 	public String getUsername() {
 		return username;
@@ -65,6 +67,14 @@ public class UserRegisterCommand {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getVerifyUrl() {
+		return verifyUrl;
+	}
+
+	public void setVerifyUrl(String verifyUrl) {
+		this.verifyUrl = verifyUrl;
 	}
 
 	@Override
