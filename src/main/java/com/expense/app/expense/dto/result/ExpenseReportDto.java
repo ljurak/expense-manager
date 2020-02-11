@@ -1,4 +1,4 @@
-package com.expense.app.expense.dto;
+package com.expense.app.expense.dto.result;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
