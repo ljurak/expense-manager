@@ -27,6 +27,10 @@ public class ExpenseFilterQuery {
 	private BigDecimal maxValue;
 	
 	private String username;
+	
+	private int page;
+	
+	private int pageSize;
 
 	public LocalDate getSearchStartDate() {
 		return searchStartDate;
@@ -74,6 +78,22 @@ public class ExpenseFilterQuery {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
 	}
 
 	@Override

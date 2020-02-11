@@ -6,9 +6,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,40 +25,23 @@ import com.expense.app.expense.dto.query.ExpenseReportQuery;
 import com.expense.app.expense.dto.result.ExpenseReportDto;
 import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.entity.ExpenseEntity;
-import com.expense.app.expense.repo.CategoryRepo;
-import com.expense.app.expense.repo.ExpenseRepo;
-import com.expense.app.expense.service.ExpenseQueryService;
-import com.expense.app.expense.service.ExpenseReportCreator;
-import com.expense.app.expense.repo.ExpenseFilterSpecification;
+import com.expense.app.expense.service.query.ExpenseQueryService;
 
 @Controller
 public class ExpenseQueryController {
 	
-	private ExpenseRepo expenseRepo;
-	
-	private CategoryRepo categoryRepo;
-	
 	private ExpenseQueryService expenseService;
-	
-	private ExpenseReportCreator reportCreator;
 	
 	@Value("${expenses.pageSize}")
 	private int pageSize;
 	
-	public ExpenseQueryController(
-			ExpenseRepo expenseRepo, 
-			CategoryRepo categoryRepo, 
-			ExpenseQueryService expenseService,
-			ExpenseReportCreator reportCreator) {
-		this.expenseRepo = expenseRepo;
-		this.categoryRepo = categoryRepo;
+	public ExpenseQueryController(ExpenseQueryService expenseService) {
 		this.expenseService = expenseService;
-		this.reportCreator = reportCreator;
 	}
 	
 	@ModelAttribute("expenseCategories")
 	public Iterable<CategoryEntity> populateCategories() {
-		return categoryRepo.findAll();
+		return expenseService.getCategories();
 	}
 	
 	@GetMapping("/expenses/show")
@@ -81,10 +61,10 @@ public class ExpenseQueryController {
 		
 		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
 		query.setUsername(username);
+		query.setPage(page);
+		query.setPageSize(pageSize);
 		
-		Specification<ExpenseEntity> specification = new ExpenseFilterSpecification(query);
-		Page<ExpenseEntity> pageWrapper = 
-				expenseRepo.findAll(specification, PageRequest.of(page, pageSize, Sort.by("date").descending()));
+		Page<ExpenseEntity> pageWrapper = expenseService.getExpenses(query);
 		
 		model.addAttribute("expensesList", pageWrapper.getContent());
 		model.addAttribute("pageCount", pageWrapper.getTotalPages());
@@ -131,10 +111,8 @@ public class ExpenseQueryController {
 		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
 		query.setUsername(username);
 		
-		ExpenseReportDto report = expenseService.generateReport(query);
-		
 		try {
-			byte[] pdfReport = reportCreator.generatePdfReport(report);
+			byte[] pdfReport = expenseService.generatePdfReport(query);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_PDF);
 			headers.set("Content-Disposition", "attachment; filename=report.pdf");

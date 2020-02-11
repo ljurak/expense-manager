@@ -14,23 +14,33 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
 
-import com.expense.app.expense.dto.ExpenseReportDto;
 import com.expense.app.expense.dto.query.ExpenseReportQuery;
+import com.expense.app.expense.dto.result.ExpenseReportDto;
 import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.entity.ExpenseEntity;
+import com.expense.app.expense.repo.CategoryRepo;
 import com.expense.app.expense.repo.ExpenseRepo;
+import com.expense.app.expense.service.query.ExpenseQueryService;
+import com.expense.app.expense.service.query.ExpenseQueryServiceImpl;
+import com.expense.app.expense.service.query.ExpenseReportCreator;
 
 @ExtendWith(MockitoExtension.class)
 public class ExpenseQueryServiceImplTest {
 	
 	private ExpenseRepo expenseRepo;
 	
+	private CategoryRepo categoryRepo;
+	
+	private ExpenseReportCreator reportCreator;
+	
 	private ExpenseQueryService expenseService;
 	
 	@BeforeEach
 	public void setUp() {
 		expenseRepo = mock(ExpenseRepo.class);
-		expenseService = new ExpenseQueryServiceImpl(expenseRepo);
+		categoryRepo = mock(CategoryRepo.class);
+		reportCreator = mock(ExpenseReportCreator.class);
+		expenseService = new ExpenseQueryServiceImpl(expenseRepo, categoryRepo, reportCreator);
 	}
 	
 	@Test

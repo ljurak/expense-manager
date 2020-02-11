@@ -1,4 +1,4 @@
-package com.expense.app.expense.service;
+package com.expense.app.expense.service.query;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -7,29 +7,55 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.expense.app.expense.dto.query.ExpenseFilterQuery;
 import com.expense.app.expense.dto.query.ExpenseReportQuery;
 import com.expense.app.expense.dto.result.ExpenseReportDto;
 import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.entity.ExpenseEntity;
+import com.expense.app.expense.repo.CategoryRepo;
+import com.expense.app.expense.repo.ExpenseFilterSpecification;
 import com.expense.app.expense.repo.ExpenseRepo;
 import com.expense.app.expense.repo.ExpenseReportSpecification;
 
 @Service
+@Transactional(readOnly = true)
 public class ExpenseQueryServiceImpl implements ExpenseQueryService {
 	
 	private ExpenseRepo expenseRepo;
 	
-	public ExpenseQueryServiceImpl(ExpenseRepo expenseRepo) {
+	private CategoryRepo categoryRepo;
+	
+	private ExpenseReportCreator reportCreator;
+	
+	public ExpenseQueryServiceImpl(
+			ExpenseRepo expenseRepo, 
+			CategoryRepo categoryRepo, 
+			ExpenseReportCreator reportCreator) {
 		this.expenseRepo = expenseRepo;
+		this.categoryRepo = categoryRepo;
+		this.reportCreator = reportCreator;
+	}
+	
+	@Override
+	public Iterable<CategoryEntity> getCategories() {
+		return categoryRepo.findAll();
+	}
+	
+	@Override
+	public Page<ExpenseEntity> getExpenses(ExpenseFilterQuery query) {
+		Specification<ExpenseEntity> specification = new ExpenseFilterSpecification(query);
+		return expenseRepo.findAll(
+				specification, PageRequest.of(query.getPage(), query.getPageSize(), Sort.by("date").descending()));
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public ExpenseReportDto generateReport(ExpenseReportQuery query) {
 		Specification<ExpenseEntity> specification = new ExpenseReportSpecification(query);
 		List<ExpenseEntity> expenseList = expenseRepo.findAll(specification, Sort.by("date").ascending());
@@ -64,6 +90,12 @@ public class ExpenseQueryServiceImpl implements ExpenseQueryService {
 				.expenseList(expenseList)
 				.expenseByCategory(expenseByCategory)
 				.build();
+	}
+	
+	@Override
+	public byte[] generatePdfReport(ExpenseReportQuery query) throws Exception {
+		ExpenseReportDto report = generateReport(query);
+		return reportCreator.generatePdfReport(report);
 	}
 	
 	private BigDecimal calculateMinExpense(List<ExpenseEntity> expenseList) {

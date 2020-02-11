@@ -1,4 +1,4 @@
-package com.expense.app.expense.service;
+package com.expense.app.expense.service.query;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
