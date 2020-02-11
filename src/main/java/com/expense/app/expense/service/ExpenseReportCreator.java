@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.springframework.stereotype.Component;
 
-import com.expense.app.expense.dto.ExpenseReportDto;
+import com.expense.app.expense.dto.result.ExpenseReportDto;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;

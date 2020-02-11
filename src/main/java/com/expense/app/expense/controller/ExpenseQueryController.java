@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.expense.app.expense.dto.ExpenseReportDto;
 import com.expense.app.expense.dto.command.ExpenseCreateCommand;
 import com.expense.app.expense.dto.query.ExpenseFilterQuery;
 import com.expense.app.expense.dto.query.ExpenseReportQuery;
+import com.expense.app.expense.dto.result.ExpenseReportDto;
 import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.entity.ExpenseEntity;
 import com.expense.app.expense.repo.CategoryRepo;

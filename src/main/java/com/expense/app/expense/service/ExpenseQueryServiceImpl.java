@@ -12,8 +12,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.expense.app.expense.dto.ExpenseReportDto;
 import com.expense.app.expense.dto.query.ExpenseReportQuery;
+import com.expense.app.expense.dto.result.ExpenseReportDto;
 import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.entity.ExpenseEntity;
 import com.expense.app.expense.repo.ExpenseRepo;
