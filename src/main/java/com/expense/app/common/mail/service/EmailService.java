@@ -1,4 +1,4 @@
-package com.expense.app.mail.service;
+package com.expense.app.common.mail.service;
 
 import org.springframework.mail.SimpleMailMessage;
 
