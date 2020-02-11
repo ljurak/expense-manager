@@ -76,7 +76,7 @@ public class ExpenseReportCreator {
 				"Minimal expense",
 				"Maximal expense",
 				"Average expense",
-				"Total sum of expenses expense"
+				"Total sum of expenses"
 		};
 		
 		String[] infoValues = new String[] {

@@ -70,7 +70,8 @@ public class UserCommandServiceImpl implements UserCommandService {
 		validateUsernameAndEmail(command);		
 		UserEntity user = createUser(command);		
 		VerificationTokenEntity verificationToken = createVerificationToken(user);
-		emailService.sendEmail(EmailFactory.createVerificationEmail(user.getEmail(), verificationToken.getToken()));		
+		emailService.sendEmail(EmailFactory.createVerificationEmail(
+				user.getEmail(), verificationToken.getToken(), command.getVerifyUrl()));		
 	}
 	
 	private void validateUsernameAndEmail(UserRegisterCommand command) {
@@ -136,7 +137,8 @@ public class UserCommandServiceImpl implements UserCommandService {
 				.orElseThrow(() -> new UserNotFoundException("User with email [" + command.getEmail() + "] has not been found."));
 		if (!resetTokenRepo.existsByUser(user)) {
 			ResetPasswordTokenEntity resetToken = createResetToken(user);
-			emailService.sendEmail(EmailFactory.createResetPasswordEmail(command.getEmail(), resetToken.getToken()));	
+			emailService.sendEmail(EmailFactory.createResetPasswordEmail(
+					command.getEmail(), resetToken.getToken(), command.getResetUrl()));	
 		}			
 	}
 	
