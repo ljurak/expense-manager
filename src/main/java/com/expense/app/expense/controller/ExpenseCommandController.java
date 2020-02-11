@@ -13,24 +13,24 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import com.expense.app.common.cqrs.command.CommandDispatcher;
 import com.expense.app.expense.dto.command.ExpenseCreateCommand;
 import com.expense.app.expense.dto.command.ExpenseDeleteCommand;
 import com.expense.app.expense.dto.query.ExpenseFilterQuery;
 import com.expense.app.expense.dto.query.ExpenseReportQuery;
 import com.expense.app.expense.entity.CategoryEntity;
 import com.expense.app.expense.repo.CategoryRepo;
-import com.expense.app.expense.service.ExpenseCommandService;
 
 @Controller
 public class ExpenseCommandController {
 	
-	private ExpenseCommandService expenseService;
+	private CommandDispatcher commandDispatcher;
 	
 	private CategoryRepo categoryRepo;
 	
-	public ExpenseCommandController(ExpenseCommandService expenseService, CategoryRepo categoryRepo) {
-		this.expenseService = expenseService;
+	public ExpenseCommandController(CategoryRepo categoryRepo, CommandDispatcher commandDispatcher) {
 		this.categoryRepo = categoryRepo;
+		this.commandDispatcher = commandDispatcher;
 	}
 	
 	@ModelAttribute("expenseCategories")
@@ -48,14 +48,10 @@ public class ExpenseCommandController {
 			return "expensesPage";
 		}
 		
-		if (command.getDescription().length() == 0) {
-			command.setDescription(null);
-		}
-		
 		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
 		command.setUsername(username);
 		
-		expenseService.createExpense(command);
+		commandDispatcher.dispatch(command);
 		return "redirect:/expenses/show";
 	}
 	
@@ -64,7 +60,7 @@ public class ExpenseCommandController {
 		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
 		ExpenseDeleteCommand command = new ExpenseDeleteCommand(id, username);
 		
-		expenseService.deleteExpense(command);
+		commandDispatcher.dispatch(command);
 		
 		String redirectUrl = refererHeader.substring(refererHeader.indexOf("/expenses"));
 		return "redirect:" + redirectUrl;

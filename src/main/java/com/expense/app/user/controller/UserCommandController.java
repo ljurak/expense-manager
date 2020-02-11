@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.expense.app.common.cqrs.command.CommandDispatcher;
 import com.expense.app.user.dto.command.ResetPasswordTokenDeleteCommand;
 import com.expense.app.user.dto.command.UserActivateCommand;
 import com.expense.app.user.dto.command.UserChangePasswordCommand;
@@ -23,15 +24,14 @@ import com.expense.app.user.exception.ResetPasswordTokenException;
 import com.expense.app.user.exception.UserNotAvailableException;
 import com.expense.app.user.exception.UserNotFoundException;
 import com.expense.app.user.exception.VerificationTokenException;
-import com.expense.app.user.service.UserCommandService;
 
 @Controller
 public class UserCommandController {
 	
-	private UserCommandService userService;
+	private CommandDispatcher commandDispatcher;
 	
-	public UserCommandController(UserCommandService userService) {
-		this.userService = userService;
+	public UserCommandController(CommandDispatcher commandDispatcher) {
+		this.commandDispatcher = commandDispatcher;
 	}
 	
 	@PostMapping("/register-user")
@@ -45,14 +45,14 @@ public class UserCommandController {
 				.build()
 				.toUriString();
 		command.setVerifyUrl(verifyUrl);
-		userService.registerUser(command);
+		commandDispatcher.dispatch(command);
 		return "redirect:/register-user?success";
 	}
 	
 	@GetMapping("/activate-user")
 	public String activateUser(@RequestParam(name = "token") String token) {
 		UserActivateCommand command = new UserActivateCommand(token);
-		userService.activateUser(command);
+		commandDispatcher.dispatch(command);
 		return "redirect:/login?active";
 	}
 	
@@ -67,7 +67,7 @@ public class UserCommandController {
 				.build()
 				.toUriString();
 		command.setResetUrl(resetUrl);
-		userService.resetPassword(command);
+		commandDispatcher.dispatch(command);
 		return "redirect:/reset-password?success";
 	}
 	
@@ -77,7 +77,7 @@ public class UserCommandController {
 		if (result.hasErrors()) {
 			return "changePassword";
 		}
-		userService.changePassword(command);
+		commandDispatcher.dispatch(command);
 		return "redirect:/login?changed";
 	}
 	
@@ -102,7 +102,7 @@ public class UserCommandController {
 	@ExceptionHandler(VerificationTokenException.class)
 	public String handleVerificationTokenException(VerificationTokenException exception, Model model) {
 		if (exception.getTokenId() != 0) {
-			userService.deleteNotVerifiedUser(new UserNotVerifiedDeleteCommand(exception.getTokenId()));
+			commandDispatcher.dispatch(new UserNotVerifiedDeleteCommand(exception.getTokenId()));
 		}
 		
 		model.addAttribute("userCommand", new UserRegisterCommand());
@@ -118,7 +118,7 @@ public class UserCommandController {
 	@ExceptionHandler(ResetPasswordTokenException.class)
 	public String handleResetPasswordTokenException(ResetPasswordTokenException exception) {
 		if (exception.getTokenId() != 0) {
-			userService.deleteResetToken(new ResetPasswordTokenDeleteCommand(exception.getTokenId()));
+			commandDispatcher.dispatch(new ResetPasswordTokenDeleteCommand(exception.getTokenId()));
 		}
 		return "redirect:/reset-password?error";
 	}
