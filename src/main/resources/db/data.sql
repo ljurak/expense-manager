@@ -1,8 +1,8 @@
 INSERT INTO roles (name) VALUES ('ROLE_USER');
 
 INSERT INTO users (username, password, firstname, lastname, email, enabled) VALUES
-	('ananas', '{bcrypt}$2b$10$QzusaIaXlHQkKHlG7nPtdeMoKIYrpTWXWH2JRjCoi1cEKR8h3Nak2', 'Anatol', 'Mongoł', 'among@mail.com', 1),
-	('admin', '{bcrypt}$2a$10$BheR7dG26AN19p3AXpMqF.QzfkZMPqfcH0jqov9DmZY7pAXcZ5Od6', 'Admin', 'Admin', 'admin@example.com', 1);
+	('admin', '{bcrypt}$2a$10$BheR7dG26AN19p3AXpMqF.QzfkZMPqfcH0jqov9DmZY7pAXcZ5Od6', 'Admin', 'Admin', 'admin@example.mail.com', 1),
+	('sample', '{bcrypt}$2b$10$Oc6Tb3.Pm.r9ifAua9EqaeKzVix4c/mz508dLH.uoL0Jrd7HJ/Dgm', 'Sample', 'Sample', 'sample@example.mail.com', 1);
 	
 INSERT INTO users_roles (user_id, role_id) VALUES (1, 1), (2, 1);
 
