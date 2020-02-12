@@ -37,7 +37,7 @@
 				<span class="title" th:text="#{expensesPage.list.description}">Description:</span>
 				<span class="value" th:text="${expense.description}">Definitely too much money!</span>
 			</div>
-			<a class="remove-btn" href="#" th:href="@{|/expenses/delete/${expense.id}|}" th:text="#{expensesPage.list.remove}">Remove</a>
+			<a class="remove-btn" href="#" th:href="@{|/expenses/delete/${expense.id}|}" th:text="#{expensesPage.list.remove}">X</a>
 		</div>
 		<ul class="pagination-control" th:if="${pageCount > 1 && !#lists.isEmpty(expensesList)}" th:with="query=${expenseFilterQuery}">
 			<li class="pagination-control-item">
