@@ -11,10 +11,7 @@ body {
 	margin: 0;
 	min-height: 100vh;
 	font-family: 'Roboto', sans-serif;
-	/*background-color: #bbfcff;*/
-	/* Background pattern from Toptal Subtle Patterns */
-	background-image: url('../img/trees.png');
-
+	background: linear-gradient(90deg, rgba(0,212,255,1) 0%, rgba(19,110,204,1) 50%, rgba(0,212,255,1) 100%);
 }
 
 .container {
@@ -22,9 +19,8 @@ body {
 	min-height: 100vh;
 	margin: 0 auto;
 	padding: 70px 15px 50px;
-	background-color: #fff;
-	border-left: 1px solid #000;
-	border-right: 1px solid #000;
+	background-color: #f9fafc;
+	box-shadow: 0 0 10px 0 rgba(0,0,0,0.75);
 	position: relative;
 	display: flex;
 }
@@ -135,21 +131,24 @@ body {
 .search-form input:focus,
 .search-form select:focus {
 	box-shadow: inset 0 0 1px rgba(0,0,0,.3);
+	border: 1px solid #00d4ff;
 }
 
 .search-form .submit-btn {
 	display: block;
-	padding: 5px 20px;
 	margin: 0 auto;
-	background-color: transparent;
-	border: 2px solid #000;
+	padding: 5px 20px;
+	color: #fff;
+	background-color: #140ff0;
+	border: 2px solid transparent;
 	border-radius: 4px;
 	transition: all 0.3s;
 }
 
 .search-form .submit-btn:hover {
-	border-color: #00d000;
-	color: #00d000;
+	border-color: #140ff0;
+	color: #140ff0;
+	background-color: #fff;
 }
 
 .search-form div.error {
@@ -202,21 +201,24 @@ body {
 .report-form input:focus,
 .report-form select:focus {
 	box-shadow: inset 0 0 1px rgba(0,0,0,.3);
+	border: 1px solid #00d4ff;
 }
 
 .report-form .submit-btn {
 	display: block;
-	padding: 5px 20px;
-	background-color: transparent;
-	border: 2px solid #000;
-	border-radius: 4px;
 	margin: 0 auto;
+	padding: 5px 20px;
+	color: #fff;
+	background-color: #140ff0;
+	border: 2px solid transparent;
+	border-radius: 4px;
 	transition: all 0.3s;
 }
 
 .report-form .submit-btn:hover {
-	border-color: #00d000;
-	color: #00d000;
+	border-color: #140ff0;
+	color: #140ff0;
+	background-color: #fff;
 }
 
 .report-form div.error {
@@ -240,8 +242,10 @@ body {
 .expense-form {
 	margin: 0 auto;
 	padding: 20px;
-	border: 2px solid #000;
-	border-radius: 4px;
+	border: 1px solid #000;
+	color: #555;
+	background-color: #fff;
+	box-shadow: 2px 2px 5px 0 rgba(0,0,0,0.75);
 }
 
 .expense-form .form-group {
@@ -282,20 +286,24 @@ body {
 .expense-form select:focus,
 .expense-form textarea:focus {
 	box-shadow: inset 0 0 1px rgba(0,0,0,.3);
+	border: 1px solid #00d4ff;
 }
 
 .expense-form .submit-btn {
-	padding: 5px 20px;
-	background-color: transparent;
-	border: 2px solid #000;
-	border-radius: 4px;
+	display: block;
 	margin: 0 auto;
+	padding: 5px 20px;
+	color: #fff;
+	background-color: #140ff0;
+	border: 2px solid transparent;
+	border-radius: 4px;
 	transition: all 0.3s;
 }
 
 .expense-form .submit-btn:hover {
-	border-color: #00d000;
-	color: #00d000;
+	border-color: #140ff0;
+	color: #140ff0;
+	background-color: #fff;
 }
 
 .expense-form div.error {

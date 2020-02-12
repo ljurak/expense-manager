@@ -1,9 +1,14 @@
 .expense-report {
 	position: relative;
+	margin-top: 40px;
+	border: 1px solid #000;
+	background-color: #fff;
+	box-shadow: 2px 2px 5px 0 rgba(0,0,0,0.75);
+	padding: 20px;
 }
 
 .report-header {
-	margin: 40px 0 10px;
+	margin: 0 0 10px;
 	font-size: 22px;
 	font-weight: normal;
 }
@@ -17,17 +22,19 @@
 	top: 10px;
 	right: 10px;
 	font-size: 14px;
-	color: #000;
 	text-decoration: none;
 	padding: 5px 20px;
-	border: 2px solid #000;
+	color: #fff;
+	background-color: #140ff0;
+	border: 2px solid transparent;
 	border-radius: 4px;
 	transition: all 0.3s;
 }
 
 .report-print:hover {
-	border-color: #00d000;
-	color: #00d000;
+	border-color: #140ff0;
+	color: #140ff0;
+	background-color: #fff;
 }
 
 .report-content {
@@ -43,7 +50,7 @@
 }
 
 .report-content p:nth-of-type(2n) {
-	background-color: rgba(0,0,0,.1);
+	background-color: #d7deeb;
 }
 
 .report-details,
@@ -71,5 +78,5 @@
 }
 
 .report-details-row:nth-of-type(2n) {
-	background-color: rgba(0,0,0,.1);
+	background-color: #d7deeb;
 }
