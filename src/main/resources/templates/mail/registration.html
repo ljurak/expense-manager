@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+	
+		body {
+			text-align: center;
+		}
+	
+		a.register-link {
+			display: inline-block;
+			padding: 5px 20px;
+			margin: 0 auto;
+			background-color: #140ff0;
+			color: #fff;
+			text-decoration: none;
+			border: 2px solid transparent;
+			border-radius: 4px;
+			transition: all 0.3s;
+		}
+		
+		a.register-link:hover {
+			background-color: #fff;
+			color: #140ff0;
+			border: 2px solid #140ff0;
+		}
+	</style>
+</head>
+<body>
+	<p>
+		Thank you for registering in our service. 
+		To activate your account please click the following link:
+	</p>
+	<a class="register-link" th:href="${link}" target="_blank">Register your account</a>	
+</body>
+</html>
