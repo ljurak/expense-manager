@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.expense.app.common.cqrs.command.CommandHandler;
-import com.expense.app.common.mail.service.EmailFactory;
 import com.expense.app.common.mail.service.EmailService;
 import com.expense.app.user.dto.command.UserRegisterCommand;
 import com.expense.app.user.entity.RoleEntity;
@@ -52,8 +51,7 @@ public class UserRegisterCommandHandler implements CommandHandler<UserRegisterCo
 		validateUsernameAndEmail(command);		
 		UserEntity user = createUser(command);		
 		VerificationTokenEntity verificationToken = createVerificationToken(user);
-		emailService.sendEmail(EmailFactory.createVerificationEmail(
-				user.getEmail(), verificationToken.getToken(), command.getVerifyUrl()));		
+		emailService.sendRegistrationEmail(user.getEmail(), verificationToken.getToken(), command.getVerifyUrl());		
 	}
 	
 	private void validateUsernameAndEmail(UserRegisterCommand command) {

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.expense.app.common.cqrs.command.CommandHandler;
-import com.expense.app.common.mail.service.EmailFactory;
 import com.expense.app.common.mail.service.EmailService;
 import com.expense.app.user.dto.command.UserResetPasswordCommand;
 import com.expense.app.user.entity.ResetPasswordTokenEntity;
@@ -39,8 +38,7 @@ public class UserResetPasswordCommandHandler implements CommandHandler<UserReset
 				.orElseThrow(() -> new UserNotFoundException("User with email [" + command.getEmail() + "] has not been found."));
 		if (!resetTokenRepo.existsByUser(user)) {
 			ResetPasswordTokenEntity resetToken = createResetToken(user);
-			emailService.sendEmail(EmailFactory.createResetPasswordEmail(
-					command.getEmail(), resetToken.getToken(), command.getResetUrl()));	
+			emailService.sendResetPasswordEmail(command.getEmail(), resetToken.getToken(), command.getResetUrl());
 		}	
 		
 	}
