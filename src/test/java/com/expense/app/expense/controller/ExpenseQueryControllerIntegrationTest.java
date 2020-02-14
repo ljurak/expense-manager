@@ -61,7 +61,7 @@ public class ExpenseQueryControllerIntegrationTest {
 		.andExpect(view().name("expensesPage"))
 		.andExpect(model().attributeExists("expensesList"))
 		.andExpect(model().attributeExists("pageCount"))
-		.andExpect(model().attribute("pageCount", 1));
+		.andExpect(model().attribute("pageCount", 7));
 	}
 	
 	@Test
@@ -91,7 +91,8 @@ public class ExpenseQueryControllerIntegrationTest {
 		.andExpect(view().name("reportPage"))
 		.andExpect(model().attributeExists("expenseFilterQuery"))
 		.andExpect(model().attributeExists("expenseCreateCommand"))
-		.andExpect(model().attributeExists("expenseReportQuery"));
+		.andExpect(model().attributeExists("expenseReportQuery"))
+		.andExpect(model().attributeDoesNotExist("report"));
 	}
 	
 	@Test

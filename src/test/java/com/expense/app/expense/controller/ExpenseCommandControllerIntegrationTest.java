@@ -31,7 +31,6 @@ public class ExpenseCommandControllerIntegrationTest {
 				.build();
 	}
 	
-	
 	@Test
 	@WithMockUser("admin")
 	public void shouldFailValidationWhenCreatingExpenseWithMissingParameters() throws Exception {
@@ -73,7 +72,7 @@ public class ExpenseCommandControllerIntegrationTest {
 	@DirtiesContext
 	public void shouldDeleteExpense() throws Exception {
 		// when
-		mockMvc.perform(get("/expenses/delete/{id}", 1)
+		mockMvc.perform(get("/expenses/delete/{id}", 10)
 				.header("Referer", "http://localhost:8080/expenses/show"))
 		
 		// then
