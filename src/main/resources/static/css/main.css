@@ -52,6 +52,8 @@ body {
 }
 
 .logout-form .submit-btn {
+	font-size: 14px;
+	line-height: 16px;
 	padding: 5px 20px;
 	background-color: var(--main-color);
 	color: #fff;
@@ -61,6 +63,25 @@ body {
 }
 
 .logout-form .submit-btn:hover {
+	border-color: var(--main-color);
+	background-color: #fff;
+	color: var(--main-color);
+}
+
+.account-link {
+	font-size: 14px;
+	line-height: 16px;
+	text-decoration: none;
+	padding: 5px 20px;
+	margin-left: 20px;
+	color: #fff;
+	background-color: var(--main-color);
+	border: 2px solid #fff;
+	border-radius: 4px;
+	transition: all 0.3s;
+}
+
+.account-link:hover {
 	border-color: var(--main-color);
 	background-color: #fff;
 	color: var(--main-color);

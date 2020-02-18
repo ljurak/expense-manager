@@ -18,6 +18,7 @@
 				<form class="logout-form" action="#" th:action="@{/perform-logout}" method="post">
 					<button class="submit-btn" type="submit">Log out</button>
 				</form>
+				<a href="#" th:href="@{/user}" class="account-link" sec:authorize="isAuthenticated()">My account</a>
 			</div>
 		</header>
 		<aside class="sidebar">
