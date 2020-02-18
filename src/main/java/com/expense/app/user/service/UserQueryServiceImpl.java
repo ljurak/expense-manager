@@ -6,19 +6,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.expense.app.user.entity.ResetPasswordTokenEntity;
+import com.expense.app.user.entity.UserEntity;
 import com.expense.app.user.exception.ResetPasswordTokenException;
+import com.expense.app.user.exception.UserNotFoundException;
 import com.expense.app.user.repo.ResetPasswordTokenRepo;
+import com.expense.app.user.repo.UserRepo;
 
 @Service
 @Transactional(readOnly = true)
 public class UserQueryServiceImpl implements UserQueryService {
+	
+	private UserRepo userRepo;
 
 	private ResetPasswordTokenRepo resetTokenRepo;
 	
 	@Value("${resetToken.expirationTime}")
 	private long expirationTime;
 	
-	public UserQueryServiceImpl(ResetPasswordTokenRepo resetTokenRepo) {
+	public UserQueryServiceImpl(UserRepo userRepo, ResetPasswordTokenRepo resetTokenRepo) {
+		this.userRepo = userRepo;
 		this.resetTokenRepo = resetTokenRepo;
 	}
 
@@ -35,4 +41,10 @@ public class UserQueryServiceImpl implements UserQueryService {
 			throw new ResetPasswordTokenException("Your token has expired.");
 		}		
 	}
+
+	@Override
+	public UserEntity getUser(String username) {
+		return userRepo.findByUsername(username)
+				.orElseThrow(() -> new UserNotFoundException("User [" + username + "] does not exist."));
+	}	
 }
