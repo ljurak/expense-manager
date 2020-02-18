@@ -3,6 +3,8 @@ package com.expense.app.user.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,24 +16,37 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.expense.app.common.cqrs.command.CommandDispatcher;
+import com.expense.app.expense.dto.command.ExpenseCreateCommand;
+import com.expense.app.expense.dto.query.ExpenseFilterQuery;
+import com.expense.app.expense.dto.query.ExpenseReportQuery;
+import com.expense.app.expense.service.query.ExpenseQueryService;
 import com.expense.app.user.dto.command.ResetPasswordTokenDeleteCommand;
 import com.expense.app.user.dto.command.UserActivateCommand;
 import com.expense.app.user.dto.command.UserChangePasswordCommand;
 import com.expense.app.user.dto.command.UserNotVerifiedDeleteCommand;
 import com.expense.app.user.dto.command.UserRegisterCommand;
 import com.expense.app.user.dto.command.UserResetPasswordCommand;
+import com.expense.app.user.dto.command.UserUpdatePasswordCommand;
 import com.expense.app.user.exception.ResetPasswordTokenException;
+import com.expense.app.user.exception.UpdatePasswordException;
 import com.expense.app.user.exception.UserNotAvailableException;
 import com.expense.app.user.exception.UserNotFoundException;
 import com.expense.app.user.exception.VerificationTokenException;
+import com.expense.app.user.service.UserQueryService;
 
 @Controller
 public class UserCommandController {
 	
 	private CommandDispatcher commandDispatcher;
 	
-	public UserCommandController(CommandDispatcher commandDispatcher) {
+	private ExpenseQueryService expenseService;
+	
+	private UserQueryService userService;
+	
+	public UserCommandController(CommandDispatcher commandDispatcher, ExpenseQueryService expenseService, UserQueryService userService) {
 		this.commandDispatcher = commandDispatcher;
+		this.expenseService = expenseService;
+		this.userService = userService;
 	}
 	
 	@PostMapping("/register-user")
@@ -81,14 +96,38 @@ public class UserCommandController {
 		return "redirect:/login?changed";
 	}
 	
+	@PostMapping("/user/update-password")
+	public String updatePassword(@ModelAttribute("updatePasswordCommand") @Valid UserUpdatePasswordCommand command, BindingResult result, Authentication authentication, Model model) {
+		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+		command.setUsername(username);
+		
+		model.addAttribute("expenseCreateCommand", new ExpenseCreateCommand());
+		model.addAttribute("expenseFilterQuery", new ExpenseFilterQuery());
+		model.addAttribute("expenseReportQuery", new ExpenseReportQuery());
+		model.addAttribute("expenseCategories", expenseService.getCategories());
+		model.addAttribute("user", userService.getUser(username));
+		
+		validateUpdatePassword(command, result);
+		if (result.hasErrors()) {
+			return "userPage";
+		}		
+		
+		commandDispatcher.dispatch(command);
+		return "redirect:/user?success";
+	}
+	
 	private void validateChangePassword(UserChangePasswordCommand command, BindingResult result) {
 		if (command.getToken() == null) {
 			result.rejectValue("token", "changePasswordCommand.token.required");
 		}
-		if (command.getPassword() != null && command.getConfirmPassword() != null) {
-			if (!command.getPassword().equals(command.getConfirmPassword())) {
-				result.rejectValue("confirmPassword", "changePasswordCommand.confirmPassword.mismatch");
-			}
+		if (!command.getPassword().equals(command.getConfirmPassword())) {
+			result.rejectValue("confirmPassword", "changePasswordCommand.confirmPassword.mismatch");
+		}
+	}
+	
+	private void validateUpdatePassword(UserUpdatePasswordCommand command, BindingResult result) {
+		if (!command.getNewPassword().equals(command.getConfirmPassword())) {
+			result.rejectValue("confirmPassword", "updatePasswordCommand.confirmPassword.mismatch");
 		}
 	}
 	
@@ -121,5 +160,10 @@ public class UserCommandController {
 			commandDispatcher.dispatch(new ResetPasswordTokenDeleteCommand(exception.getTokenId()));
 		}
 		return "redirect:/reset-password?error";
+	}
+	
+	@ExceptionHandler(UpdatePasswordException.class)
+	public String handleUpdatePasswordException(UpdatePasswordException exception) {
+		return "redirect:/user?error";
 	}
 }
