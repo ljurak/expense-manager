@@ -7,45 +7,45 @@
 <body>
 	<section class="user-page" th:if="${user}">
 		<div class="user-data">
-			<p th:text="|First name: ${user.firstname}|">First name</p>
-			<p th:text="|Last name: ${user.lastname}|">Last name</p>
-			<p th:text="|Email: ${user.email}|">Email</p>
+			<p th:text="#{userPage.userData.firstname(${user.firstname})}">First name</p>
+			<p th:text="#{userPage.userData.lastname(${user.lastname})}">Last name</p>
+			<p th:text="#{userPage.userData.email(${user.email})}">Email</p>
 		</div>
-		<h2 class="update-password-form-header">Change password</h2>
+		<h2 class="update-password-form-header" th:text="#{userPage.userPasswordForm.header}">Change password</h2>
 		<form class="update-password-form" action="#" th:action="@{/user/update-password}" th:object="${updatePasswordCommand}" method="post">
 			<div class="form-group">
-				<label for="currentPassword">Current password*</label>
+				<label for="currentPassword" th:text="#{userPage.userPasswordForm.currentPassword}">Current password*</label>
 				<input th:field="*{currentPassword}" type="password" required th:errorclass="error">
 				<div class="error" th:if="${#fields.hasErrors('currentPassword')}">
 					<p th:each="err : ${#fields.errors('currentPassword')}" th:text="${err}">Error message</p>
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="newPassword">New password*</label>
+				<label for="newPassword" th:text="#{userPage.userPasswordForm.newPassword}">New password*</label>
 				<input th:field="*{newPassword}" type="password" required th:errorclass="error">
 				<div class="error" th:if="${#fields.hasErrors('newPassword')}">
 					<p th:each="err : ${#fields.errors('newPassword')}" th:text="${err}">Error message</p>
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="confirmPassword">Confirm new password*</label>
+				<label for="confirmPassword" th:text="#{userPage.userPasswordForm.confirmPassword}">Confirm new password*</label>
 				<input th:field="*{confirmPassword}" type="password" required th:errorclass="error">
 				<div class="error" th:if="${#fields.hasErrors('confirmPassword')}">
 					<p th:each="err : ${#fields.errors('confirmPassword')}" th:text="${err}">Error message</p>
 				</div>
 			</div>
 			<div class="form-group" th:if="${param.error}">
-				<div class="alert-error">
+				<div class="alert-error" th:text="#{userPage.userPasswordForm.alert.invalid}">
 					Current password is invalid.
 				</div>
 			</div>
 			<div class="form-group" th:if="${param.success}">
-				<div class="alert-success">
+				<div class="alert-success" th:text="#{userPage.userPasswordForm.alert.success}">
 					Your password has been changed.
 				</div>
 			</div>
 			<div class="form-group">
-				<button class="submit-btn" type="submit">Change password</button>
+				<button class="submit-btn" type="submit" th:test="#{userPage.userPasswordForm.submit.label}">Change password</button>
 			</div>
 		</form>
 	</section>
