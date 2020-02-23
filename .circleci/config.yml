@@ -1,15 +1,11 @@
 version: 2
-jobs: # a collection of steps
-  build: # runs not using Workflows must have a `build` job as entry point
+jobs: 
+  build: 
     
     working_directory: ~/expense-manager 
 
     docker:
       - image: circleci/openjdk:11-jdk
-      
-    branches:
-      only:
-        - release
       
     environment:
       JVM_OPTS: -Xmx3200m
@@ -36,10 +32,6 @@ jobs: # a collection of steps
     
     docker:
       - image: circleci/buildpack-deps:trusty
-      
-    branches:
-      only:
-        - release
       
     steps:
     
