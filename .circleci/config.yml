@@ -58,11 +58,13 @@ workflows:
       - build:
           filters:
             branches:
-              only: release
+              only: 
+                - release
       - deploy:
           requires:
             - build
           filters:
             branches:
-              only: release
+              only: 
+                - release
           
