@@ -1,15 +1,11 @@
-version: 2.0
-jobs: # a collection of steps
-  build: # runs not using Workflows must have a `build` job as entry point
+version: 2
+jobs: 
+  build: 
     
     working_directory: ~/expense-manager 
 
     docker:
       - image: circleci/openjdk:11-jdk
-      
-    branches:
-      only:
-        - release
       
     environment:
       JVM_OPTS: -Xmx3200m
@@ -30,4 +26,37 @@ jobs: # a collection of steps
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
       
-      - run: mvn test 
+      - run: mvn test
+      
+  deploy:
+    
+    docker:
+      - image: circleci/buildpack-deps:trusty
+      
+    steps:
+    
+      - checkout
+      
+      - run:
+        name: Deploy app on heroku
+        command: |
+          git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+          
+          
+workflows:
+  version: 2  
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: 
+                - release
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: 
+                - release
+          
