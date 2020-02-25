@@ -8,7 +8,7 @@
 }
 
 .report-header {
-	margin: 0 0 10px;
+	margin: 5px 0 10px;
 	font-size: 22px;
 	font-weight: normal;
 }
@@ -17,13 +17,18 @@
 	font-style: italic;
 }
 
+.report-controls {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.report-email,
 .report-print {
-	position: absolute;
-	top: 10px;
-	right: 10px;
 	font-size: 14px;
 	text-decoration: none;
 	padding: 5px 20px;
+	margin-left: 20px;
 	color: #fff;
 	background-color: #140ff0;
 	border: 2px solid transparent;
@@ -31,6 +36,7 @@
 	transition: all 0.3s;
 }
 
+.report-email:hover,
 .report-print:hover {
 	border-color: #140ff0;
 	color: #140ff0;
@@ -79,4 +85,14 @@
 
 .report-details-row:nth-of-type(2n) {
 	background-color: #d7deeb;
+}
+
+.expense-report .alert-error {
+	color: #f00;
+	margin-bottom: 10px;
+}
+
+.expense-report .alert-success {
+	color: #05af05;
+	margin-bottom: 10px;
 }
