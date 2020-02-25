@@ -4,12 +4,25 @@
 	<link rel="stylesheet" href="../static/css/report.css" th:href="@{/css/report.css}">
 	<script></script>
 </head>
-<body>		
+<body>
+	<section class="expense-report" th:if="${error}">
+		<header>
+			<div class="alert-error" th:if="${error}">
+				Oups, error occured while sending email. Please try again.
+			</div>
+		</header>
+	</section>	
 	<section class="expense-report" th:if="${report}">
 		<header>
+			<div class="alert-success" th:if="${success}">
+				Email has been sent successfully.
+			</div>
+			<div class="report-controls">
+				<a class="report-email" th:unless="${report.expenseCount} == 0" href="#" th:href="@{/expenses/report/email(reportStartDate=${expenseReportQuery.reportStartDate},reportEndDate=${expenseReportQuery.reportEndDate},reportCategoryId=${expenseReportQuery.reportCategoryId})}">Send to email</a>
+				<a class="report-print" th:unless="${report.expenseCount} == 0" href="#" th:href="@{/expenses/report/print(reportStartDate=${expenseReportQuery.reportStartDate},reportEndDate=${expenseReportQuery.reportEndDate},reportCategoryId=${expenseReportQuery.reportCategoryId})}">Print as PDF</a>
+			</div>
 			<h2 class="report-header">Expense report</h2>
 			<div class="report-dates" th:text="|From: ${#temporals.format(expenseReportQuery.reportStartDate, 'dd-MM-yyyy')} To: ${#temporals.format(expenseReportQuery.reportEndDate, 'dd-MM-yyyy')}|">From: 18-10-2019  To: 25-12-2019</div>
-			<a class="report-print" th:unless="${report.expenseCount} == 0" href="#" th:href="@{/expenses/report/print(reportStartDate=${expenseReportQuery.reportStartDate},reportEndDate=${expenseReportQuery.reportEndDate},reportCategoryId=${expenseReportQuery.reportCategoryId})}">Print as PDF</a>
 		</header>
 		<div class="report-content" th:if="${report.expenseCount} == 0">
 			No expenses found for given report criteria. Try again with different values.
