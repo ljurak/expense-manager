@@ -13,4 +13,5 @@ public interface ExpenseQueryService {
 	Page<ExpenseEntity> getExpenses(ExpenseFilterQuery query);
 	ExpenseReportDto generateReport(ExpenseReportQuery query);
 	byte[] generatePdfReport(ExpenseReportQuery query) throws Exception;
+	ExpenseReportDto sendPdfReport(ExpenseReportQuery query) throws Exception;
 }

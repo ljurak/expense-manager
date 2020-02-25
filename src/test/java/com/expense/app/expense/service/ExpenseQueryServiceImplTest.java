@@ -14,6 +14,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
 
+import com.expense.app.common.mail.service.EmailService;
 import com.expense.app.expense.dto.query.ExpenseReportQuery;
 import com.expense.app.expense.dto.result.ExpenseReportDto;
 import com.expense.app.expense.entity.CategoryEntity;
@@ -23,6 +24,7 @@ import com.expense.app.expense.repo.ExpenseRepo;
 import com.expense.app.expense.service.query.ExpenseQueryService;
 import com.expense.app.expense.service.query.ExpenseQueryServiceImpl;
 import com.expense.app.expense.service.query.ExpenseReportCreator;
+import com.expense.app.user.repo.UserRepo;
 
 @ExtendWith(MockitoExtension.class)
 public class ExpenseQueryServiceImplTest {
@@ -31,7 +33,11 @@ public class ExpenseQueryServiceImplTest {
 	
 	private CategoryRepo categoryRepo;
 	
+	private UserRepo userRepo;
+	
 	private ExpenseReportCreator reportCreator;
+	
+	private EmailService emailService;
 	
 	private ExpenseQueryService expenseService;
 	
@@ -39,8 +45,10 @@ public class ExpenseQueryServiceImplTest {
 	public void setUp() {
 		expenseRepo = mock(ExpenseRepo.class);
 		categoryRepo = mock(CategoryRepo.class);
+		userRepo = mock(UserRepo.class);
 		reportCreator = mock(ExpenseReportCreator.class);
-		expenseService = new ExpenseQueryServiceImpl(expenseRepo, categoryRepo, reportCreator);
+		emailService = mock(EmailService.class);
+		expenseService = new ExpenseQueryServiceImpl(expenseRepo, categoryRepo, userRepo, reportCreator, emailService);
 	}
 	
 	@Test

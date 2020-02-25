@@ -122,6 +122,35 @@ public class ExpenseQueryController {
 		}
 	}
 	
+	@GetMapping("/expenses/report/email")
+	public String sendPdfReport(
+			@ModelAttribute("expenseReportQuery") @Valid ExpenseReportQuery query,
+			BindingResult result,
+			Authentication authentication,
+			Model model) {
+		
+		model.addAttribute("expenseCreateCommand", new ExpenseCreateCommand());
+		model.addAttribute("expenseFilterQuery", new ExpenseFilterQuery());
+		
+		validateStartAndEndDate(query.getReportStartDate(), query.getReportEndDate(), result);
+		if (result.hasErrors()) {
+			return "reportPage";
+		}
+		
+		String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+		query.setUsername(username);
+		
+		try {
+			ExpenseReportDto report = expenseService.sendPdfReport(query);
+			model.addAttribute("report", report);
+			model.addAttribute("success", "Report has been sent");
+			return "reportPage";
+		} catch (Exception ex) {
+			model.addAttribute("error", "Error occured when sending email");
+			return "reportPage";
+		}
+	}
+	
 	private void validateStartAndEndDate(LocalDate startDate, LocalDate endDate, BindingResult result) {		
 		if (startDate != null && endDate != null) {
 			if (startDate.isAfter(endDate)) {
