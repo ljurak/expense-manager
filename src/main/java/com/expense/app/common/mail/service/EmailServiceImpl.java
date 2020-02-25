@@ -3,6 +3,7 @@ package com.expense.app.common.mail.service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -67,6 +68,27 @@ public class EmailServiceImpl implements EmailService {
 			helper.setTo(to);
 			helper.setSubject("Reset password request!");
 			helper.setText(text, true);
+		} catch (MessagingException ex) {
+			throw new RuntimeException(ex);
+		}
+		
+		mailSender.send(mail);
+	}
+	
+	@Override
+	@Async
+	public void sendPdfReportEmail(String to, byte[] pdfReport) {
+		Context ctx = new Context();
+		String text = templateEngine.process("mail/pdfReport", ctx);
+		
+		MimeMessage mail = mailSender.createMimeMessage();
+		try {
+			MimeMessageHelper helper = new MimeMessageHelper(mail, true);
+			helper.setTo(to);
+			helper.setSubject("Expenses pdf report!");
+			helper.setText(text, true);
+			ByteArrayResource report = new ByteArrayResource(pdfReport);
+			helper.addAttachment("report.pdf", report);
 		} catch (MessagingException ex) {
 			throw new RuntimeException(ex);
 		}

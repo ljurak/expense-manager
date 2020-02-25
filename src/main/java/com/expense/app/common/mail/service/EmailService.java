@@ -9,4 +9,5 @@ public interface EmailService {
 	void sendEmail(MimeMessage mail);
 	void sendRegistrationEmail(String to, String token, String verifyUrl);
 	void sendResetPasswordEmail(String to, String token, String resetUrl);
+	void sendPdfReportEmail(String to, byte[] report);
 }
