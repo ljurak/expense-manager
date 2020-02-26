@@ -1,4 +1,4 @@
-package com.expense.app.user.service;
+package com.expense.app.user.service.query;
 
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import com.expense.app.user.repo.UserRepo;
 
 @Service
 @Transactional(readOnly = true)
-public class UserQueryServiceImpl implements UserQueryService {
+public class UserQueryService {
 	
 	private UserRepo userRepo;
 
@@ -23,26 +23,21 @@ public class UserQueryServiceImpl implements UserQueryService {
 	@Value("${resetToken.expirationTime}")
 	private long expirationTime;
 	
-	public UserQueryServiceImpl(UserRepo userRepo, ResetPasswordTokenRepo resetTokenRepo) {
+	public UserQueryService(UserRepo userRepo, ResetPasswordTokenRepo resetTokenRepo) {
 		this.userRepo = userRepo;
 		this.resetTokenRepo = resetTokenRepo;
 	}
 
-	@Override
 	public void validateResetPasswordToken(String token) {
 		ResetPasswordTokenEntity resetToken = resetTokenRepo.findByToken(token)
 				.orElseThrow(() -> new ResetPasswordTokenException("Your token is no longer valid."));
-		validateResetToken(resetToken);
-	}
-	
-	private void validateResetToken(ResetPasswordTokenEntity resetToken) {
+		
 		LocalDateTime expirationDate = resetToken.getCreatedAt().plusSeconds(expirationTime);
 		if (LocalDateTime.now().isAfter(expirationDate)) {
 			throw new ResetPasswordTokenException("Your token has expired.");
 		}		
 	}
 
-	@Override
 	public UserEntity getUser(String username) {
 		return userRepo.findByUsername(username)
 				.orElseThrow(() -> new UserNotFoundException("User [" + username + "] does not exist."));
