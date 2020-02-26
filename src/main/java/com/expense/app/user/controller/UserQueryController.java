@@ -17,7 +17,7 @@ import com.expense.app.user.dto.command.UserRegisterCommand;
 import com.expense.app.user.dto.command.UserResetPasswordCommand;
 import com.expense.app.user.dto.command.UserUpdatePasswordCommand;
 import com.expense.app.user.exception.ResetPasswordTokenException;
-import com.expense.app.user.service.UserQueryService;
+import com.expense.app.user.service.query.UserQueryService;
 
 @Controller
 public class UserQueryController {

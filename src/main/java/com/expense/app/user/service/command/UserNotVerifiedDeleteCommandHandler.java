@@ -1,5 +1,7 @@
 package com.expense.app.user.service.command;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +27,10 @@ public class UserNotVerifiedDeleteCommandHandler implements CommandHandler<UserN
 	@Override
 	@Transactional
 	public void handle(UserNotVerifiedDeleteCommand command) {
-		VerificationTokenEntity verificationToken = verificationTokenRepo.findById(command.getTokenId()).orElse(null);
-		if (verificationToken != null) {
-			UserEntity user = verificationToken.getUser();
-			verificationTokenRepo.delete(verificationToken);
+		Optional<VerificationTokenEntity> verificationToken = verificationTokenRepo.findById(command.getTokenId());
+		if (verificationToken.isPresent()) {
+			UserEntity user = verificationToken.get().getUser();
+			verificationTokenRepo.delete(verificationToken.get());
 			userRepo.delete(user);
 		}		
 	}	

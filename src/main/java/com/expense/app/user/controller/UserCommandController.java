@@ -32,7 +32,7 @@ import com.expense.app.user.exception.UpdatePasswordException;
 import com.expense.app.user.exception.UserNotAvailableException;
 import com.expense.app.user.exception.UserNotFoundException;
 import com.expense.app.user.exception.VerificationTokenException;
-import com.expense.app.user.service.UserQueryService;
+import com.expense.app.user.service.query.UserQueryService;
 
 @Controller
 public class UserCommandController {
