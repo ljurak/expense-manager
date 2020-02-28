@@ -43,6 +43,7 @@ public class EmailService {
 		try {
 			MimeMessageHelper helper = new MimeMessageHelper(mail);
 			helper.setTo(to);
+			helper.setFrom("noreply@expense-manager.mail.com");
 			helper.setSubject("Activate your account!");
 			helper.setText(text, true);
 		} catch (MessagingException ex) {
@@ -62,6 +63,7 @@ public class EmailService {
 		try {
 			MimeMessageHelper helper = new MimeMessageHelper(mail);
 			helper.setTo(to);
+			helper.setFrom("noreply@expense-manager.mail.com");
 			helper.setSubject("Reset password request!");
 			helper.setText(text, true);
 		} catch (MessagingException ex) {
@@ -80,6 +82,7 @@ public class EmailService {
 		try {
 			MimeMessageHelper helper = new MimeMessageHelper(mail, true);
 			helper.setTo(to);
+			helper.setFrom("noreply@expense-manager.mail.com");
 			helper.setSubject("Expenses pdf report!");
 			helper.setText(text, true);
 			ByteArrayResource report = new ByteArrayResource(pdfReport);
