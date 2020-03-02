@@ -49,5 +49,10 @@ Application is divided into two main modules: expenses and users.
 ## Screenshots
 
 ![user registration](images/screenshot1.png)
+User registration
+
 ![main page](images/screenshot2.png)
+Main page
+
 ![expense report](images/screenshot3.png)
+Expense report
