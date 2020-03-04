@@ -5,6 +5,7 @@ Light web application helping you manage your expenses.
 ## Table of contents
 
 * [General info](#general-info)
+* [How to start](#how-to-start)
 * [Technologies](#technologies)
 * [Architecture](#architecture)
 * [Features](#features)
@@ -17,6 +18,25 @@ Every user needs to create their own account. There is a possibility to search e
 by date, category or value. Another option is generating periodic reports. Each report 
 includes summary of your expenses e.g. min/max/avg/sum of expenses, listing of expenses
 by category. Report can be generated as PDF file and sent to your email account.
+
+## How to start
+
+Clone the repository to your local machine using `https://github.com/ljurak/expense-manager.git`.
+Then you have to set properties for SMTP server in `src/main/resources/application.properties` file.
+Set the following properties for your SMTP server:
+```
+spring.mail.host=
+spring.mail.port=
+spring.mail.username=
+spring.mail.password=
+```
+Once mail properties have been set you can build project from the root folder
+```bash
+mvn clean package
+cd target
+java -jar expense-manager.jar
+```
+The app will start on http://localhost:8080
 
 ## Technologies
 
