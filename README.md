@@ -5,6 +5,7 @@ Light web application helping you manage your expenses.
 ## Table of contents
 
 * [General info](#general-info)
+* [Demo version](#demo-version)
 * [How to start](#how-to-start)
 * [Technologies](#technologies)
 * [Architecture](#architecture)
@@ -18,6 +19,11 @@ Every user needs to create their own account. There is a possibility to search e
 by date, category or value. Another option is generating periodic reports. Each report 
 includes summary of your expenses e.g. min/max/avg/sum of expenses, listing of expenses
 by category. Report can be generated as PDF file and sent to your email account.
+
+## Demo version
+
+The running version of the application is available here [Expense Manager](https://manager-expenses.herokuapp.com) 
+(it may take about 20s to start the server). 
 
 ## How to start
 
