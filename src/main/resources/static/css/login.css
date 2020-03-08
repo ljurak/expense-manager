@@ -70,3 +70,19 @@
 	text-decoration: none;
 	color: #140ff0;
 }
+
+.login-form .demo-credentials {
+	text-align: left;
+	border: 1px solid rgba(0,0,0,.3);
+	border-radius: 4px;
+	padding: 5px;
+}
+
+.login-form .demo-credentials p {
+	margin: 0;
+	margin-bottom: 5px;	
+}
+
+.login-form .demo-credentials p:last-child {
+	margin-bottom: 0;
+}
