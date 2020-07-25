@@ -24,6 +24,9 @@ public class UserChangePasswordCommandHandler implements CommandHandler<UserChan
 	@Value("${verificationToken.expirationTime}")
 	private long expirationTime;
 	
+	@Value("{encoder.prefix}")
+	private String encoderPrefix;
+	
 	public UserChangePasswordCommandHandler(ResetPasswordTokenRepo resetTokenRepo, PasswordEncoder passwordEncoder) {
 		this.resetTokenRepo = resetTokenRepo;
 		this.passwordEncoder = passwordEncoder;
@@ -36,7 +39,7 @@ public class UserChangePasswordCommandHandler implements CommandHandler<UserChan
 				.orElseThrow(() -> new ResetPasswordTokenException("Your token is no longer valid."));
 		validateResetToken(resetToken);
 		UserEntity user = resetToken.getUser();
-		user.setPassword("{bcrypt}" + passwordEncoder.encode(command.getPassword()));
+		user.setPassword(encoderPrefix + passwordEncoder.encode(command.getPassword()));
 		resetTokenRepo.delete(resetToken);
 	}
 	

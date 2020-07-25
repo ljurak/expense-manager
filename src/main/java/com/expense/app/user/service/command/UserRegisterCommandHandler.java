@@ -3,6 +3,7 @@ package com.expense.app.user.service.command;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,9 @@ public class UserRegisterCommandHandler implements CommandHandler<UserRegisterCo
 	private PasswordEncoder passwordEncoder;
 	
 	private EmailService emailService;
+	
+	@Value("${encoder.prefix}")
+	private String encoderPrefix;
 
 	public UserRegisterCommandHandler(
 			UserRepo userRepo, 
@@ -65,7 +69,7 @@ public class UserRegisterCommandHandler implements CommandHandler<UserRegisterCo
 				.orElseThrow(() -> new RoleNotFoundException("Role USER does not exist"));		
 		UserEntity user = UserEntity.builder()
 				.username(command.getUsername())
-				.password("{bcrypt}" + passwordEncoder.encode(command.getPassword()))
+				.password(encoderPrefix + passwordEncoder.encode(command.getPassword()))
 				.firstname(command.getFirstname())
 				.lastname(command.getLastname())
 				.email(command.getEmail())

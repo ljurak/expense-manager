@@ -1,5 +1,6 @@
 package com.expense.app.user.service.command;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,9 @@ public class UserUpdatePasswordCommandHandler implements CommandHandler<UserUpda
 	
 	private PasswordEncoder passwordEncoder;
 	
+	@Value("${encoder.prefix}")
+	private String encoderPrefix;
+	
 	public UserUpdatePasswordCommandHandler(UserRepo userRepo, PasswordEncoder passwordEncoder) {
 		this.userRepo = userRepo;
 		this.passwordEncoder = passwordEncoder;
@@ -28,9 +32,9 @@ public class UserUpdatePasswordCommandHandler implements CommandHandler<UserUpda
 	public void handle(UserUpdatePasswordCommand command) {
 		UserEntity user = userRepo.findByUsername(command.getUsername())
 				.orElseThrow(() -> new UserNotFoundException("User [" + command.getUsername() + "] has not been found"));
-		if (!passwordEncoder.matches(command.getCurrentPassword(), user.getPassword().replace("{bcrypt}", ""))) {
+		if (!passwordEncoder.matches(command.getCurrentPassword(), user.getPassword().replace(encoderPrefix, ""))) {
 			throw new UpdatePasswordException("Invalid password");
 		}
-		user.setPassword("{bcrypt}" + passwordEncoder.encode(command.getNewPassword()));
+		user.setPassword(encoderPrefix + passwordEncoder.encode(command.getNewPassword()));
 	}	
 }
