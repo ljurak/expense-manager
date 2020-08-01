@@ -7,51 +7,51 @@
 <body>
 	<section class="expense-report" th:if="${error}">
 		<header>
-			<div class="alert-error" th:if="${error}">
+			<div class="alert-error" th:if="${error}" th:text="#{reportPage.mail.alert.error}">
 				Oups, error occured while sending email. Please try again.
 			</div>
 		</header>
 	</section>	
 	<section class="expense-report" th:if="${report}">
 		<header>
-			<div class="alert-success" th:if="${success}">
+			<div class="alert-success" th:if="${success}" th:text="#{reportPage.mail.alert.success}">
 				Email has been sent successfully.
 			</div>
 			<div class="report-controls">
-				<a class="report-email" th:unless="${report.expenseCount} == 0" href="#" th:href="@{/expenses/report/email(reportStartDate=${expenseReportQuery.reportStartDate},reportEndDate=${expenseReportQuery.reportEndDate},reportCategoryId=${expenseReportQuery.reportCategoryId})}">Send to email</a>
-				<a class="report-print" th:unless="${report.expenseCount} == 0" href="#" th:href="@{/expenses/report/print(reportStartDate=${expenseReportQuery.reportStartDate},reportEndDate=${expenseReportQuery.reportEndDate},reportCategoryId=${expenseReportQuery.reportCategoryId})}">Print as PDF</a>
+				<a class="report-email" th:unless="${report.expenseCount} == 0" href="#" th:href="@{/expenses/report/email(reportStartDate=${expenseReportQuery.reportStartDate},reportEndDate=${expenseReportQuery.reportEndDate},reportCategoryId=${expenseReportQuery.reportCategoryId})}" th:text="#{reportPage.report.sendEmail}">Send to email</a>
+				<a class="report-print" th:unless="${report.expenseCount} == 0" href="#" th:href="@{/expenses/report/print(reportStartDate=${expenseReportQuery.reportStartDate},reportEndDate=${expenseReportQuery.reportEndDate},reportCategoryId=${expenseReportQuery.reportCategoryId})}" th:text="#{reportPage.report.printPDF}">Print as PDF</a>
 			</div>
-			<h2 class="report-header">Expense report</h2>
+			<h2 class="report-header" th:text="#{reportPage.report.header}">Expense report</h2>
 			<div class="report-dates" th:text="|From: ${#temporals.format(expenseReportQuery.reportStartDate, 'dd-MM-yyyy')} To: ${#temporals.format(expenseReportQuery.reportEndDate, 'dd-MM-yyyy')}|">From: 18-10-2019  To: 25-12-2019</div>
 		</header>
-		<div class="report-content" th:if="${report.expenseCount} == 0">
+		<div class="report-content" th:if="${report.expenseCount} == 0" th:text="#{reportPage.report.noContent}">
 			No expenses found for given report criteria. Try again with different values.
 		</div>
 		<div class="report-content" th:unless="${report.expenseCount} == 0">
 			<div class="report-general">
 				<p>
-					<span>Number of expenses included in report</span>
+					<span th:text="#{reportPage.report.count}">Number of expenses included in report</span>
 					<span th:text="${report.expenseCount}">18</span>
 				</p>
 				<p>
-					<span>Minimal expense</span>
+					<span th:text="#{reportPage.report.minimum}">Minimal expense</span>
 					<span th:text="${report.minExpense}">7.50</span>
 				</p>
 				<p>
-					<span>Maximal expense</span>
+					<span th:text="#{reportPage.report.maximum}">Maximal expense</span>
 					<span th:text="${report.maxExpense}">127.20</span>
 				</p>
 				<p>
-					<span>Average expense</span>
+					<span th:text="#{reportPage.report.average}">Average expense</span>
 					<span th:text="${report.avgExpense}">21.45</span>
 				</p>
 				<p>
-					<span>Total sum of expenses</span>
+					<span th:text="#{reportPage.report.total}">Total sum of expenses</span>
 					<span th:text="${report.sumExpense}">1565</span>
 				</p>
 			</div>
 			<div class="report-details">
-				<h3 class="report-details-title">Total sum of expenses by category</h3>
+				<h3 class="report-details-title" th:text="#{reportPage.report.details.header}">Total sum of expenses by category</h3>
 				<ul>
 					<li class="report-details-row" th:each="entry : ${report.expenseByCategory}">
 						<span class="expense-category" th:text="${entry.key.name}">Category:</span>
